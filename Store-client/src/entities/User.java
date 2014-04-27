@@ -51,12 +51,12 @@ public class User implements Serializable {
     private String userEmail;
     @OneToMany(mappedBy = "userId")
     private List<Address> addressList;
-    @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID")
-    @ManyToOne(optional = false)
-    private Role roleId;
     @JoinColumn(name = "COMPANY_ID", referencedColumnName = "COMPANY_ID")
     @ManyToOne
     private Company companyId;
+    @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID")
+    @ManyToOne(optional = false)
+    private Role roleId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private List<Client> clientList;
 
@@ -71,8 +71,8 @@ public class User implements Serializable {
         this.userId = userId;
         this.userPassword = userPassword;
         this.userEmail = userEmail;
-    }    
-    
+    }
+
     public Integer getUserId() {
         return userId;
     }
@@ -114,20 +114,20 @@ public class User implements Serializable {
         this.addressList = addressList;
     }
 
-    public Role getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Role roleId) {
-        this.roleId = roleId;
-    }
-
     public Company getCompanyId() {
         return companyId;
     }
 
     public void setCompanyId(Company companyId) {
         this.companyId = companyId;
+    }
+
+    public Role getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Role roleId) {
+        this.roleId = roleId;
     }
 
     @XmlTransient

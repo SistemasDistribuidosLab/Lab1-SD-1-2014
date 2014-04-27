@@ -19,7 +19,7 @@ import jpacontrollers.UserJpaController;
  *
  * @author sylar
  */
-public class ImplUserInterface extends UnicastRemoteObject implements UserInterface {
+public class ImplUserInterface extends UnicastRemoteObject {
 
     UserJpaController userJpaController;
             

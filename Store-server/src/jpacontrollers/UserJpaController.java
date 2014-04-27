@@ -6,20 +6,21 @@
 
 package jpacontrollers;
 
-import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import entities.Role;
-import entities.Company;
 import entities.Address;
+import entities.Client;
+import entities.Company;
+import entities.Role;
+import entities.User;
+import interfaces.UserInterface;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import entities.Client;
-import entities.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import jpacontrollers.exceptions.IllegalOrphanException;
 import jpacontrollers.exceptions.NonexistentEntityException;
 import jpacontrollers.exceptions.PreexistingEntityException;
@@ -28,7 +29,7 @@ import jpacontrollers.exceptions.PreexistingEntityException;
  *
  * @author sylar
  */
-public class UserJpaController implements Serializable {
+public class UserJpaController implements Serializable, UserInterface {
 
     public UserJpaController(EntityManagerFactory emf) {
         this.emf = emf;
@@ -39,6 +40,7 @@ public class UserJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
+    @Override
     public void create(User user) throws PreexistingEntityException, Exception {
         if (user.getAddressList() == null) {
             user.setAddressList(new ArrayList<Address>());
@@ -111,7 +113,8 @@ public class UserJpaController implements Serializable {
             }
         }
     }
-
+    
+    @Override
     public void edit(User user) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
@@ -221,7 +224,8 @@ public class UserJpaController implements Serializable {
             }
         }
     }
-
+    
+    @Override
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
@@ -268,7 +272,8 @@ public class UserJpaController implements Serializable {
             }
         }
     }
-
+    
+    @Override
     public List<User> findUserEntities() {
         return findUserEntities(true, -1, -1);
     }
