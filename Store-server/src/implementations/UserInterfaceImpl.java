@@ -40,7 +40,12 @@ public class UserInterfaceImpl extends UnicastRemoteObject implements UserInterf
         
         em.getTransaction().begin();
         List<User> listUsers = userJpaController.findUserEntities();
-        Integer idLastUser = listUsers.get(listUsers.size()-1).getUserId();
+        Integer idLastUser;
+        if(listUsers.size()>=1){
+            idLastUser = listUsers.get(listUsers.size()-1).getUserId();
+        }else{
+            idLastUser = 1;
+        }
         user.setUserId(idLastUser+1);        
         try {            
             userJpaController.create(user); //persist the entity                   

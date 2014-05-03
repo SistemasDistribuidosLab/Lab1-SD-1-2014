@@ -38,7 +38,12 @@ public class RoleInterfaceImpl extends UnicastRemoteObject implements RoleInterf
         
         em.getTransaction().begin();
         List<Role> listRoles = roleJpaController.findRoleEntities();
-        Integer idLastRole = listRoles.get(listRoles.size()-1).getRoleId();
+        Integer idLastRole;
+        if(listRoles.size()>=1){
+            idLastRole = listRoles.get(listRoles.size()-1).getRoleId();
+        }else{
+            idLastRole = 1;
+        }
         role.setRoleId(idLastRole+1);        
         try {            
             roleJpaController.create(role); //persist the entity                   
