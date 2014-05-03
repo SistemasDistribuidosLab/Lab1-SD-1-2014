@@ -29,7 +29,7 @@ import jpacontrollers.exceptions.PreexistingEntityException;
  *
  * @author sylar
  */
-public class UserJpaController implements Serializable, UserInterface {
+public class UserJpaController implements Serializable {
 
     public UserJpaController(EntityManagerFactory emf) {
         this.emf = emf;
@@ -39,8 +39,7 @@ public class UserJpaController implements Serializable, UserInterface {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-
-    @Override
+ 
     public void create(User user) throws PreexistingEntityException, Exception {
         if (user.getAddressList() == null) {
             user.setAddressList(new ArrayList<Address>());
@@ -113,8 +112,7 @@ public class UserJpaController implements Serializable, UserInterface {
             }
         }
     }
-    
-    @Override
+     
     public void edit(User user) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
@@ -224,8 +222,7 @@ public class UserJpaController implements Serializable, UserInterface {
             }
         }
     }
-    
-    @Override
+     
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
@@ -272,8 +269,7 @@ public class UserJpaController implements Serializable, UserInterface {
             }
         }
     }
-    
-    @Override
+     
     public List<User> findUserEntities() {
         return findUserEntities(true, -1, -1);
     }

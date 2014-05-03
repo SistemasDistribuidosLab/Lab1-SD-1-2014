@@ -6,6 +6,8 @@
 
 package interfaces;
 
+import entities.Company;
+import entities.Role;
 import entities.User;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -16,8 +18,8 @@ import java.util.List;
  * @author sylar
  */
 public interface UserInterface extends Remote{
-    public void create(User user) throws Exception, RemoteException;
-    public void edit(User user) throws Exception, RemoteException;
-    public void destroy(Integer id) throws Exception, RemoteException;
-    public List<User> findUserEntities() throws RemoteException;
+    public void createUser(User user, Company company, Role role) throws Exception, RemoteException;
+    public void editUser(User user) throws Exception, RemoteException;
+    public void destroyUser(User user) throws Exception, RemoteException;
+    public List<User> getUserList() throws RemoteException;
 }

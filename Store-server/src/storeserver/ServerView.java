@@ -1,17 +1,33 @@
 package storeserver;
+import entities.Role;
 import implementations.InterfaceServerImpl;
+import interfaces.RoleInterface;
+import interfaces.UserInterface;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
+import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceUnit;
+import jpacontrollers.RoleJpaController;
 
 
 public class ServerView extends javax.swing.JFrame {
     //Se instancia la clase conexion para poder iniciar una,
     //o eventualmente detenerla
     private RMIConnection connection = new RMIConnection();
-
+    
+    
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("Store-serverPU");
+    EntityManager em = emf.createEntityManager();
+    RoleJpaController roleJpaController = new RoleJpaController(emf); //create an instance of your jpa controller and pass in the injected emf 
+        
+    
     public ServerView() {
         initComponents();
     }
@@ -85,6 +101,24 @@ public class ServerView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void iniciarServer(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iniciarServer
+       
+        Role role = new Role();
+        role.setRoleName("NN");
+        role.setRoleDescription("Can do nothing");
+        
+        em.getTransaction().begin();
+        List<Role> listRoles = roleJpaController.findRoleEntities();
+        Integer idLastRole = listRoles.get(listRoles.size()-1).getRoleId();
+        role.setRoleId(idLastRole+1);        
+        try {            
+            roleJpaController.create(role); //persist the entity                   
+        } catch (Exception ex) {
+            Logger.getLogger(ServerView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        em.getTransaction().commit();
+        
+        
+        
         Registry registry;
         try {
             registry = connection.getRegistry();

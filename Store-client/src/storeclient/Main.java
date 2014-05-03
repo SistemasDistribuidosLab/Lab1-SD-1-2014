@@ -6,6 +6,10 @@
 
 package storeclient;
 
+import entities.User;
+import interfaces.UserInterface;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import views.MainView;
 
 /**
@@ -17,7 +21,17 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    
+        private static UserInterface userLocal;
+        
+    public static void main(String[] args) throws Exception {
+        User user = new User("mosheman", "sylarim@gmail.com", "asd123");
+        user.setUserName("mosheman");
+        user.setUserEmail("sylarim@gmail.com");
+        user.setUserPassword("asd123");
+        
+        userLocal.create(user);
+        
         new MainView().setVisible(true);
     }
     

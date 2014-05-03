@@ -7,16 +7,17 @@
 package jpacontrollers;
 
 import entities.Role;
-import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import entities.User;
+import interfaces.RoleInterface;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import jpacontrollers.exceptions.IllegalOrphanException;
 import jpacontrollers.exceptions.NonexistentEntityException;
 import jpacontrollers.exceptions.PreexistingEntityException;
@@ -25,7 +26,7 @@ import jpacontrollers.exceptions.PreexistingEntityException;
  *
  * @author sylar
  */
-public class RoleJpaController implements Serializable {
+public class RoleJpaController implements Serializable, Runnable {
 
     public RoleJpaController(EntityManagerFactory emf) {
         this.emf = emf;
@@ -205,6 +206,10 @@ public class RoleJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+ 
+    public void run() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
