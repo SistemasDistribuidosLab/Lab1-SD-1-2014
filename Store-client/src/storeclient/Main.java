@@ -25,13 +25,6 @@ public class Main {
         private static UserInterface userLocal;
         
     public static void main(String[] args) throws Exception {
-        User user = new User("mosheman", "sylarim@gmail.com", "asd123");
-        user.setUserName("mosheman");
-        user.setUserEmail("sylarim@gmail.com");
-        user.setUserPassword("asd123");
-        
-        userLocal.create(user);
-        
         new MainView().setVisible(true);
     }
     
