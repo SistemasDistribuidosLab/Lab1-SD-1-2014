@@ -10,6 +10,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -36,6 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Client implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "CLIENT_ID")
     private Integer clientId;
@@ -52,12 +55,12 @@ public class Client implements Serializable {
     private String clientEmail;
     @Column(name = "CLIENT_PHONE")
     private String clientPhone;
-    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
-    @ManyToOne(optional = false)
-    private User userId;
     @JoinColumn(name = "COMPANY_ID", referencedColumnName = "COMPANY_ID")
     @ManyToOne(optional = false)
     private Company companyId;
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
+    @ManyToOne(optional = false)
+    private User userId;
 
     public Client() {
     }
@@ -121,20 +124,20 @@ public class Client implements Serializable {
         this.clientPhone = clientPhone;
     }
 
-    public User getUserId() {
-        return userId;
-    }
-
-    public void setUserId(User userId) {
-        this.userId = userId;
-    }
-
     public Company getCompanyId() {
         return companyId;
     }
 
     public void setCompanyId(Company companyId) {
         this.companyId = companyId;
+    }
+
+    public User getUserId() {
+        return userId;
+    }
+
+    public void setUserId(User userId) {
+        this.userId = userId;
     }
 
     @Override

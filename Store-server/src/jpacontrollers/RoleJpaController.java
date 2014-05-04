@@ -7,26 +7,24 @@
 package jpacontrollers;
 
 import entities.Role;
-import entities.User;
-import interfaces.RoleInterface;
 import java.io.Serializable;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import entities.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import jpacontrollers.exceptions.IllegalOrphanException;
 import jpacontrollers.exceptions.NonexistentEntityException;
-import jpacontrollers.exceptions.PreexistingEntityException;
 
 /**
  *
  * @author sylar
  */
-public class RoleJpaController implements Serializable, Runnable {
+public class RoleJpaController implements Serializable {
 
     public RoleJpaController(EntityManagerFactory emf) {
         this.emf = emf;
@@ -37,7 +35,7 @@ public class RoleJpaController implements Serializable, Runnable {
         return emf.createEntityManager();
     }
 
-    public void create(Role role) throws PreexistingEntityException, Exception {
+    public void create(Role role) {
         if (role.getUserList() == null) {
             role.setUserList(new ArrayList<User>());
         }
@@ -62,11 +60,6 @@ public class RoleJpaController implements Serializable, Runnable {
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findRole(role.getRoleId()) != null) {
-                throw new PreexistingEntityException("Role " + role + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -206,10 +199,6 @@ public class RoleJpaController implements Serializable, Runnable {
         } finally {
             em.close();
         }
-    }
- 
-    public void run() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

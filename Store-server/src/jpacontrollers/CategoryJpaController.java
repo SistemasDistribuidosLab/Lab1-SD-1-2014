@@ -19,7 +19,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import jpacontrollers.exceptions.NonexistentEntityException;
-import jpacontrollers.exceptions.PreexistingEntityException;
 
 /**
  *
@@ -36,7 +35,7 @@ public class CategoryJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Category category) throws PreexistingEntityException, Exception {
+    public void create(Category category) {
         if (category.getProductList() == null) {
             category.setProductList(new ArrayList<Product>());
         }
@@ -70,11 +69,6 @@ public class CategoryJpaController implements Serializable {
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findCategory(category.getCategoryId()) != null) {
-                throw new PreexistingEntityException("Category " + category + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();

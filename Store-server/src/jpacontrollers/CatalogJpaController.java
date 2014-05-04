@@ -20,7 +20,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import jpacontrollers.exceptions.IllegalOrphanException;
 import jpacontrollers.exceptions.NonexistentEntityException;
-import jpacontrollers.exceptions.PreexistingEntityException;
 
 /**
  *
@@ -37,7 +36,7 @@ public class CatalogJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Catalog catalog) throws PreexistingEntityException, Exception {
+    public void create(Catalog catalog) {
         if (catalog.getCategoryList() == null) {
             catalog.setCategoryList(new ArrayList<Category>());
         }
@@ -71,11 +70,6 @@ public class CatalogJpaController implements Serializable {
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findCatalog(catalog.getCatalogId()) != null) {
-                throw new PreexistingEntityException("Catalog " + catalog + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();

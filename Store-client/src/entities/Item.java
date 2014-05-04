@@ -10,6 +10,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -33,6 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Item implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ITEM_ID")
     private Integer itemId;
@@ -41,12 +44,12 @@ public class Item implements Serializable {
     private String itemCode;
     @Column(name = "ITEM_STATE")
     private String itemState;
-    @JoinColumn(name = "ADDRESS_ID", referencedColumnName = "ADDRESS_ID")
-    @ManyToOne(optional = false)
-    private Address addressId;
     @JoinColumn(name = "PRODUCT_ID", referencedColumnName = "PRODUCT_ID")
     @ManyToOne(optional = false)
     private Product productId;
+    @JoinColumn(name = "ADDRESS_ID", referencedColumnName = "ADDRESS_ID")
+    @ManyToOne(optional = false)
+    private Address addressId;
 
     public Item() {
     }
@@ -84,20 +87,20 @@ public class Item implements Serializable {
         this.itemState = itemState;
     }
 
-    public Address getAddressId() {
-        return addressId;
-    }
-
-    public void setAddressId(Address addressId) {
-        this.addressId = addressId;
-    }
-
     public Product getProductId() {
         return productId;
     }
 
     public void setProductId(Product productId) {
         this.productId = productId;
+    }
+
+    public Address getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(Address addressId) {
+        this.addressId = addressId;
     }
 
     @Override

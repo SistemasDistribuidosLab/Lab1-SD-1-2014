@@ -19,7 +19,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import jpacontrollers.exceptions.IllegalOrphanException;
 import jpacontrollers.exceptions.NonexistentEntityException;
-import jpacontrollers.exceptions.PreexistingEntityException;
 
 /**
  *
@@ -36,7 +35,7 @@ public class CountryJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Country country) throws PreexistingEntityException, Exception {
+    public void create(Country country) {
         if (country.getCityList() == null) {
             country.setCityList(new ArrayList<City>());
         }
@@ -61,11 +60,6 @@ public class CountryJpaController implements Serializable {
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findCountry(country.getCountryId()) != null) {
-                throw new PreexistingEntityException("Country " + country + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();

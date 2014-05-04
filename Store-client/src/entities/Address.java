@@ -12,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -38,6 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Address implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ADDRESS_ID")
     private Integer addressId;
@@ -52,15 +55,15 @@ public class Address implements Serializable {
     private String addressDetail;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "addressId")
     private List<Item> itemList;
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
+    @ManyToOne
+    private User userId;
     @JoinColumn(name = "CITY_ID", referencedColumnName = "CITY_ID")
     @ManyToOne(optional = false)
     private City cityId;
     @JoinColumn(name = "COMPANY_ID", referencedColumnName = "COMPANY_ID")
     @ManyToOne
     private Company companyId;
-    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
-    @ManyToOne
-    private User userId;
 
     public Address() {
     }
@@ -117,6 +120,14 @@ public class Address implements Serializable {
         this.itemList = itemList;
     }
 
+    public User getUserId() {
+        return userId;
+    }
+
+    public void setUserId(User userId) {
+        this.userId = userId;
+    }
+
     public City getCityId() {
         return cityId;
     }
@@ -131,14 +142,6 @@ public class Address implements Serializable {
 
     public void setCompanyId(Company companyId) {
         this.companyId = companyId;
-    }
-
-    public User getUserId() {
-        return userId;
-    }
-
-    public void setUserId(User userId) {
-        this.userId = userId;
     }
 
     @Override

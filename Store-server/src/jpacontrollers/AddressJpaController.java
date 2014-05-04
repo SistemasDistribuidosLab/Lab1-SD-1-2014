@@ -22,7 +22,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import jpacontrollers.exceptions.IllegalOrphanException;
 import jpacontrollers.exceptions.NonexistentEntityException;
-import jpacontrollers.exceptions.PreexistingEntityException;
 
 /**
  *
@@ -39,7 +38,7 @@ public class AddressJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Address address) throws PreexistingEntityException, Exception {
+    public void create(Address address) {
         if (address.getItemList() == null) {
             address.setItemList(new ArrayList<Item>());
         }
@@ -91,11 +90,6 @@ public class AddressJpaController implements Serializable {
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findAddress(address.getAddressId()) != null) {
-                throw new PreexistingEntityException("Address " + address + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();

@@ -12,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -38,6 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "USER_ID")
     private Integer userId;
@@ -51,12 +54,12 @@ public class User implements Serializable {
     private String userEmail;
     @OneToMany(mappedBy = "userId")
     private List<Address> addressList;
-    @JoinColumn(name = "COMPANY_ID", referencedColumnName = "COMPANY_ID")
-    @ManyToOne
-    private Company companyId;
     @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID")
     @ManyToOne(optional = false)
     private Role roleId;
+    @JoinColumn(name = "COMPANY_ID", referencedColumnName = "COMPANY_ID")
+    @ManyToOne
+    private Company companyId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private List<Client> clientList;
 
@@ -69,12 +72,6 @@ public class User implements Serializable {
 
     public User(Integer userId, String userPassword, String userEmail) {
         this.userId = userId;
-        this.userPassword = userPassword;
-        this.userEmail = userEmail;
-    }
-    
-    public User(String userName, String userPassword, String userEmail) {
-        this.userName = userName;
         this.userPassword = userPassword;
         this.userEmail = userEmail;
     }
@@ -120,20 +117,20 @@ public class User implements Serializable {
         this.addressList = addressList;
     }
 
-    public Company getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Company companyId) {
-        this.companyId = companyId;
-    }
-
     public Role getRoleId() {
         return roleId;
     }
 
     public void setRoleId(Role roleId) {
         this.roleId = roleId;
+    }
+
+    public Company getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Company companyId) {
+        this.companyId = companyId;
     }
 
     @XmlTransient

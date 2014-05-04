@@ -18,7 +18,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import jpacontrollers.exceptions.NonexistentEntityException;
-import jpacontrollers.exceptions.PreexistingEntityException;
 
 /**
  *
@@ -35,7 +34,7 @@ public class ItemJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Item item) throws PreexistingEntityException, Exception {
+    public void create(Item item) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -60,11 +59,6 @@ public class ItemJpaController implements Serializable {
                 addressId = em.merge(addressId);
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findItem(item.getItemId()) != null) {
-                throw new PreexistingEntityException("Item " + item + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();
