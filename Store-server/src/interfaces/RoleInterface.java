@@ -16,8 +16,9 @@ import java.util.List;
  * @author sylar
  */
 public interface RoleInterface extends Remote{
-    public void createRole(String roleName, String roleDescription) throws RemoteException;
+    public void createRole(Role role) throws RemoteException;
     public void editRole(Role role) throws RemoteException, Exception;
     public void destroyRole(Role user) throws RemoteException, Exception;
     public List<Role> getRoleList() throws RemoteException;    
+    public Role findRole(Integer idRole) throws RemoteException;
 }

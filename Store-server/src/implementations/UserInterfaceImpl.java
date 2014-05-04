@@ -33,27 +33,11 @@ public class UserInterfaceImpl extends UnicastRemoteObject implements UserInterf
     public UserInterfaceImpl() throws RemoteException{
         super();
     }
+    
     public void createUser(User user, Company company, Role role){
-        
         user.setCompanyId(company);
         user.setRoleId(role);
-        
-        em.getTransaction().begin();
-        List<User> listUsers = userJpaController.findUserEntities();
-        Integer idLastUser;
-        if(listUsers.size()>=1){
-            idLastUser = listUsers.get(listUsers.size()-1).getUserId();
-        }else{
-            idLastUser = 1;
-        }
-        user.setUserId(idLastUser+1);        
-        try {            
-            userJpaController.create(user); //persist the entity                   
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        em.getTransaction().commit();
-        
+        userJpaController.create(user); //persist the entity                   
     }
     
     public void editUser(User user) throws Exception {
@@ -68,5 +52,7 @@ public class UserInterfaceImpl extends UnicastRemoteObject implements UserInterf
         return userJpaController.findUserEntities();
     } 
 
-
+    public User findUser(Integer idUser) {
+        return userJpaController.findUser(idUser);
+    }
 }

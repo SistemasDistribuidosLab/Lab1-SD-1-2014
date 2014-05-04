@@ -22,4 +22,5 @@ public interface UserInterface extends Remote{
     public void editUser(User user) throws Exception, RemoteException;
     public void destroyUser(User user) throws Exception, RemoteException;
     public List<User> getUserList() throws RemoteException;
+    public User findUser(Integer idUser) throws RemoteException;
 }

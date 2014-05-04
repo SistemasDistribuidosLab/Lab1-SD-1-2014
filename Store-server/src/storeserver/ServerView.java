@@ -23,10 +23,6 @@ public class ServerView extends javax.swing.JFrame {
     private RMIConnection connection = new RMIConnection();
     
     
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("Store-serverPU");
-    EntityManager em = emf.createEntityManager();
-    RoleJpaController roleJpaController = new RoleJpaController(emf); //create an instance of your jpa controller and pass in the injected emf 
-        
     
     public ServerView() {
         initComponents();
@@ -101,23 +97,6 @@ public class ServerView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void iniciarServer(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iniciarServer
-       
-        Role role = new Role();
-        role.setRoleName("NN");
-        role.setRoleDescription("Can do nothing");
-        
-        em.getTransaction().begin();
-        List<Role> listRoles = roleJpaController.findRoleEntities();
-        Integer idLastRole = listRoles.get(listRoles.size()-1).getRoleId();
-        role.setRoleId(idLastRole+1);        
-        try {            
-            roleJpaController.create(role); //persist the entity                   
-        } catch (Exception ex) {
-            Logger.getLogger(ServerView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        em.getTransaction().commit();
-        
-        
         
         Registry registry;
         try {

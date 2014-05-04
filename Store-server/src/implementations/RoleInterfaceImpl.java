@@ -30,28 +30,8 @@ public class RoleInterfaceImpl extends UnicastRemoteObject implements RoleInterf
         super();
     }
     
-    public void createRole(String roleName, String roleDescription) {
-        
-        Role role = new Role();
-        role.setRoleName(roleName);
-        role.setRoleDescription(roleDescription);
-        
-        em.getTransaction().begin();
-        List<Role> listRoles = roleJpaController.findRoleEntities();
-        Integer idLastRole;
-        if(listRoles.size()>=1){
-            idLastRole = listRoles.get(listRoles.size()-1).getRoleId();
-        }else{
-            idLastRole = 1;
-        }
-        role.setRoleId(idLastRole+1);        
-        try {            
-            roleJpaController.create(role); //persist the entity                   
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        em.getTransaction().commit();
-        
+    public void createRole(Role role) {
+        roleJpaController.create(role); //persist the entity                   
     }
     
     public void editRole(Role role) throws Exception {
@@ -65,5 +45,8 @@ public class RoleInterfaceImpl extends UnicastRemoteObject implements RoleInterf
     public List<Role> getRoleList() {
         return roleJpaController.findRoleEntities();
     } 
-
+    
+    public Role findRole(Integer idRole) {
+        return roleJpaController.findRole(idRole);
+    }
 }
