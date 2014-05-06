@@ -1,6 +1,6 @@
 package storeserver;
 import entities.Role;
-import implementations.InterfaceServerImpl;
+import implementations.ServerInterfaceImpl;
 import interfaces.RoleInterface;
 import interfaces.UserInterface;
 import java.rmi.Remote;
@@ -105,7 +105,7 @@ public class ServerView extends javax.swing.JFrame {
             //Ahora hay que hacerlo remoto, para ello se registra en el Registry
             //con el método "rebind" que lo registra con un nombre para poder ser visto en ese espacio
             //en este caso se le dio el nombre "Implementacion".
-            InterfaceServerImpl object = new InterfaceServerImpl();
+            ServerInterfaceImpl object = new ServerInterfaceImpl();
             registry.rebind("Implementation", (Remote) object);
             this.ButtonIniciar.setEnabled(false);
         } catch (RemoteException ex) {

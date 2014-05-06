@@ -22,7 +22,6 @@ public class Main {
      * @param args the command line arguments
      */
     
-        private static UserInterface userLocal;
         
     public static void main(String[] args) throws Exception {
         new MainView().setVisible(true);

@@ -1,14 +1,19 @@
 package views;
-import storeclient.ConnectionRMI;
+import entities.Role;
+import interfaces.RoleInterface;
+import interfaces.ServerInterface;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
+import storeclient.ConnectionRMI;
 
 public class MainView extends javax.swing.JFrame {
     private ConnectionRMI connection = new ConnectionRMI();
-
-    public MainView() {
+     
+    public MainView() {        
         initComponents();
     }
 
@@ -118,6 +123,18 @@ public class MainView extends javax.swing.JFrame {
         } catch (RemoteException ex) {
             Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        /*  Inicio Test Persistencia    */   
+        Role role = new Role();
+        role.setRoleName("Common");
+        role.setRoleDescription("Can do some");
+        
+        try {
+            connection.getServer().createRole(role);
+        } catch (RemoteException ex) {
+            Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        /*  Fin Test Persistencia    */        
     }//GEN-LAST:event_ingresar
  
     // Variables declaration - do not modify//GEN-BEGIN:variables

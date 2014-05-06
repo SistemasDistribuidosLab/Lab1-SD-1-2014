@@ -6,18 +6,17 @@
 
 package interfaces;
 
-import entities.Company;
 import entities.Role;
 import entities.User;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.List;
+import java.util.List; 
 
 /**
  *
  * @author sylar
  */
-public interface RoleInterface extends Remote {
+public interface RoleInterface extends Remote { 
     public void createRole(Role role) throws Exception, RemoteException;
     public void editRole(Role role) throws Exception, RemoteException;
     public void destroyRole(Role role) throws Exception, RemoteException;
