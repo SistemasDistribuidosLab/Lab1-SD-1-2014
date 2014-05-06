@@ -126,8 +126,8 @@ public class MainView extends javax.swing.JFrame {
         
         /*  Inicio Test Persistencia    */   
         Role role = new Role();
-        role.setRoleName("Common");
-        role.setRoleDescription("Can do some");
+        role.setRoleName("NN");
+        role.setRoleDescription("Can do shit");
         
         try {
             connection.getServer().createRole(role);

@@ -26,9 +26,9 @@ public interface ServerInterface extends Remote{
     public void destroyRole(Role role) throws RemoteException, Exception;
     public List<Role> getRoleList() throws RemoteException;
     public Role findRole(Integer idRole) throws RemoteException;
-    public void createUser(User user, Company company, Role role) throws RemoteException;
     
     /*  Métodos correspondientes al CRUD de USER*/
+    public void createUser(User user, Company company, Role role) throws RemoteException;    
     public void editUser(User user) throws RemoteException, Exception;
     public void destroyUser(User user) throws RemoteException, Exception;
     public List<User> getUserList() throws RemoteException;
