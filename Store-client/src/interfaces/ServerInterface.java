@@ -33,7 +33,7 @@ public interface ServerInterface extends Remote{
     public void editUser(User user) throws RemoteException, Exception;
     public void destroyUser(User user) throws RemoteException, Exception;
     public List<User> getUserList() throws RemoteException;
-    public User findUser(Integer idUser) throws RemoteException;
+    public User findUser(Integer idUser) throws RemoteException; 
     
     /*  Métodos correspondientes al CRUD de Address*/
     public void createAddress(Address address) throws RemoteException;    

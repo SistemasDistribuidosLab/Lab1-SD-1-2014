@@ -7,7 +7,6 @@
 package storeclient;
 
 import entities.User;
-import interfaces.UserInterface;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import views.MainView;

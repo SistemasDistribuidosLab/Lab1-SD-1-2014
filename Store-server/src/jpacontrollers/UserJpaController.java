@@ -295,7 +295,7 @@ public class UserJpaController implements Serializable {
             em.close();
         }
     }
-
+    
     public int getUserCount() {
         EntityManager em = getEntityManager();
         try {

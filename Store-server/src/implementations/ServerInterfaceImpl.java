@@ -52,15 +52,16 @@ public class ServerInterfaceImpl extends UnicastRemoteObject implements ServerIn
         super();
     }
     //Autentificación por implementar de manera descente xD
-    public boolean sessionBegin(String name, String pass) throws RemoteException {
-        if (name.equals("juan") && pass.equals("juan")){
-            return true;
-        }
-        else if(name.equals("pedro") && pass.equals("pedro")){
-            return true;
-        }
-        else if (name.equals("jose") && pass.equals("jose")){
-            return true;
+    public boolean sessionBegin(String email, String pass) throws RemoteException {
+        List<User> userList = userJpaController.findUserEntities();
+        if(!userList.isEmpty()) {
+            for (int i = 0; i < userList.size(); i++) {
+                if (userList.get(i).getUserEmail().contentEquals(email)) {
+                    if (userList.get(i).getUserPassword().contentEquals(pass)) {
+                        return true;
+                    }
+                }
+            }
         }
         return false;
     }

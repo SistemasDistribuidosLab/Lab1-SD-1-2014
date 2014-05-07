@@ -1,5 +1,4 @@
 package views;
-import entities.Role;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,9 +18,9 @@ public class MainView extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         LabelNombre = new javax.swing.JLabel();
-        TextFieldNombre = new javax.swing.JTextField();
+        jTextFieldEmail = new javax.swing.JTextField();
         LabelPass = new javax.swing.JLabel();
-        TextFieldPass = new javax.swing.JTextField();
+        jTextFieldPass = new javax.swing.JTextField();
         ButtonIngresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -29,9 +28,9 @@ public class MainView extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Inicio de Sesión"));
 
-        LabelNombre.setText("Nombre de Usuario:");
+        LabelNombre.setText("Email de usuario:");
 
-        LabelPass.setText("Contraseña:");
+        LabelPass.setText("Contraseña de usuario:");
 
         ButtonIngresar.setText("Ingresar");
         ButtonIngresar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -51,11 +50,11 @@ public class MainView extends javax.swing.JFrame {
                     .addComponent(LabelNombre))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(TextFieldPass)
-                    .addComponent(TextFieldNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
+                    .addComponent(jTextFieldPass)
+                    .addComponent(jTextFieldEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(209, Short.MAX_VALUE)
+                .addContainerGap(292, Short.MAX_VALUE)
                 .addComponent(ButtonIngresar)
                 .addContainerGap())
         );
@@ -65,11 +64,11 @@ public class MainView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LabelNombre)
-                    .addComponent(TextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LabelPass)
-                    .addComponent(TextFieldPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(ButtonIngresar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -97,15 +96,15 @@ public class MainView extends javax.swing.JFrame {
 
     private void ingresar(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ingresar
         //Recuperamos nombre y pass de la vista
-        String name = this.TextFieldNombre.getText();
-        String pass = this.TextFieldPass.getText();
+        String email = this.jTextFieldEmail.getText();
+        String pass = this.jTextFieldPass.getText();
         try {
             //Intentamos conectarnos con el servidor
             //Si hay exito empezamos a consumir servicios
             if (connection.beginRegistry()){
-                if (connection.getServer().sessionBegin(name, pass)){
+                if (connection.getServer().sessionBegin(email, pass)){
                     //new SecondView().getViewInstance().setVisible(true);
-                    connection.clientRegistry(name);
+                    connection.clientRegistry(email);
                     //SecondView.getViewInstance().setVisible(true);
                     this.setVisible(false);
                     new Dashboard(connection).setVisible(true);
@@ -139,9 +138,9 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JButton ButtonIngresar;
     private javax.swing.JLabel LabelNombre;
     private javax.swing.JLabel LabelPass;
-    private javax.swing.JTextField TextFieldNombre;
-    private javax.swing.JTextField TextFieldPass;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField jTextFieldEmail;
+    private javax.swing.JTextField jTextFieldPass;
     // End of variables declaration//GEN-END:variables
 
 }
