@@ -1,8 +1,6 @@
 package storeserver;
 import entities.Role;
 import implementations.ServerInterfaceImpl;
-import interfaces.RoleInterface;
-import interfaces.UserInterface;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;

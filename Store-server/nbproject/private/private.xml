@@ -3,11 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/home/sylar/proyectos/SD/SD-Lab1/Store-server/src/storeserver/ServerView.java</file>
             <file>file:/home/sylar/proyectos/SD/SD-Lab1/Store-server/src/interfaces/ServerInterface.java</file>
-            <file>file:/home/sylar/proyectos/SD/SD-Lab1/Store-server/src/implementations/UserInterfaceImpl.java</file>
             <file>file:/home/sylar/proyectos/SD/SD-Lab1/Store-server/src/entities/Role.java</file>
-            <file>file:/home/sylar/proyectos/SD/SD-Lab1/Store-server/src/implementations/RoleInterfaceImpl.java</file>
-            <file>file:/home/sylar/proyectos/SD/SD-Lab1/Store-server/src/interfaces/RoleInterface.java</file>
+            <file>file:/home/sylar/proyectos/SD/SD-Lab1/Store-server/src/entities/Address.java</file>
             <file>file:/home/sylar/proyectos/SD/SD-Lab1/Store-server/src/implementations/ServerInterfaceImpl.java</file>
         </group>
     </open-files>
