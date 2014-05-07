@@ -1,12 +1,8 @@
 package views;
 import entities.Role;
-import interfaces.RoleInterface;
-import interfaces.ServerInterface;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
 import storeclient.ConnectionRMI;
 
@@ -110,7 +106,9 @@ public class MainView extends javax.swing.JFrame {
                 if (connection.getServer().sessionBegin(name, pass)){
                     //new SecondView().getViewInstance().setVisible(true);
                     connection.clientRegistry(name);
-                    SecondView.getViewInstance().setVisible(true);
+                    //SecondView.getViewInstance().setVisible(true);
+                    this.setVisible(false);
+                    new Dashboard(connection).setVisible(true);
                 }
                 else{
                     JOptionPane.showMessageDialog(this, "Nombre y/o Contraseña Inválida", "Mensaje", JOptionPane.ERROR_MESSAGE);
@@ -124,7 +122,7 @@ public class MainView extends javax.swing.JFrame {
             Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        /*  Inicio Test Persistencia    */   
+        /*  Inicio Test Persistencia       
         Role role = new Role();
         role.setRoleName("NN");
         role.setRoleDescription("Can do shit");
@@ -134,7 +132,7 @@ public class MainView extends javax.swing.JFrame {
         } catch (RemoteException ex) {
             Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
         }
-        /*  Fin Test Persistencia    */        
+          Fin Test Persistencia    */        
     }//GEN-LAST:event_ingresar
  
     // Variables declaration - do not modify//GEN-BEGIN:variables

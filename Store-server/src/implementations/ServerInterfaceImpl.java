@@ -95,6 +95,11 @@ public class ServerInterfaceImpl extends UnicastRemoteObject implements ServerIn
     }
     
     /*  Métodos correspondientes al CRUD de USER*/
+    public void createUser(User user, Role role) throws RemoteException {
+        user.setRoleId(role);
+        userJpaController.create(user); //persist the entity                   
+    }
+    
     public void createUser(User user, Company company, Role role) throws RemoteException {
         user.setCompanyId(company);
         user.setRoleId(role);

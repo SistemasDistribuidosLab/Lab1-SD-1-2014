@@ -18,6 +18,7 @@ import java.util.List;
  * @author sylar
  */
 public interface UserInterface extends Remote{
+    public void createUser(User user, Role role) throws Exception, RemoteException;
     public void createUser(User user, Company company, Role role) throws Exception, RemoteException;
     public void editUser(User user) throws Exception, RemoteException;
     public void destroyUser(User user) throws Exception, RemoteException;
