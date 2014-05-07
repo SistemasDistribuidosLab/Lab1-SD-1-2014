@@ -16,6 +16,8 @@ import java.util.List;
  * @author sylar
  */
 public interface ServerInterface extends Remote{
+    public void enviarMensaje(String emisor, String receptor, String mensaje) throws RemoteException;
+    public void meDesconecte(String usuario) throws RemoteException;
     public boolean sessionBegin(String name, String pass) throws RemoteException;
     public void clientRegistry(ClientInterface client, String name) throws RemoteException;
     public void clientUnregistry(ClientInterface client, String name) throws RemoteException;    

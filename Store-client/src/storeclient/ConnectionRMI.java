@@ -12,6 +12,8 @@ import interfaces.ServerInterface;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import views.Dashboard;
+import views.SecondView;
 
 /**
  *
@@ -52,8 +54,8 @@ public class ConnectionRMI {
     public ServerInterface getServer(){
         return server;
     }
-    public void clientRegistry(String name) throws RemoteException{
-        client = (ClientInterface) new InterfaceClientImpl();
+    public void clientRegistry(String name, Dashboard vie) throws RemoteException{
+        client = (ClientInterface) new InterfaceClientImpl(vie);
         server.clientRegistry(client, name);
     }
 }

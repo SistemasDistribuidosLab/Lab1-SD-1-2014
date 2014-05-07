@@ -104,10 +104,12 @@ public class MainView extends javax.swing.JFrame {
             if (connection.beginRegistry()){
                 if (connection.getServer().sessionBegin(email, pass)){
                     //new SecondView().getViewInstance().setVisible(true);
-                    connection.clientRegistry(email);
+
+                    Dashboard MyDashboardView = new Dashboard(connection, email);
+                    connection.clientRegistry(email, MyDashboardView);
                     //SecondView.getViewInstance().setVisible(true);
                     this.setVisible(false);
-                    new Dashboard(connection).setVisible(true);
+                    MyDashboardView.setVisible(true);
                 }
                 else{
                     JOptionPane.showMessageDialog(this, "Nombre y/o Contraseña Inválida", "Mensaje", JOptionPane.ERROR_MESSAGE);
