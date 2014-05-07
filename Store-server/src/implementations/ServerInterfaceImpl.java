@@ -1,7 +1,15 @@
 
 package implementations;
 
+import entities.Address;
+import entities.Catalog;
+import entities.Category;
+import entities.City;
+import entities.Client;
 import entities.Company;
+import entities.Country;
+import entities.Item;
+import entities.Product;
 import entities.Role;
 import entities.User;
 import interfaces.*;
@@ -13,6 +21,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import jpacontrollers.*;
+import jpacontrollers.exceptions.IllegalOrphanException;
+import jpacontrollers.exceptions.NonexistentEntityException;
 
 /**
  *
@@ -26,7 +36,17 @@ public class ServerInterfaceImpl extends UnicastRemoteObject implements ServerIn
     /*  Controladores   */
     RoleJpaController roleJpaController = new RoleJpaController(emf); //create an instance of your jpa controller and pass in the injected emf 
     UserJpaController userJpaController = new UserJpaController(emf); //create an instance of your jpa controller and pass in the injected emf 
-     
+    AddressJpaController addressJpaController = new AddressJpaController(emf);
+    CatalogJpaController catalogJpaController = new CatalogJpaController(emf);
+    CategoryJpaController categoryJpaController = new CategoryJpaController(emf);
+    CityJpaController cityJpaController = new CityJpaController(emf);
+    ClientJpaController clientJpaController = new ClientJpaController(emf);
+    CompanyJpaController companyJpaController = new CompanyJpaController(emf);
+    CountryJpaController countryJpaController = new CountryJpaController(emf);
+    ItemJpaController itemJpaController = new ItemJpaController(emf);
+    ProductJpaController productJpaController = new ProductJpaController(emf);
+    
+
 
     public ServerInterfaceImpl() throws RemoteException{
         super();
@@ -115,5 +135,194 @@ public class ServerInterfaceImpl extends UnicastRemoteObject implements ServerIn
 
     public User findUser(Integer idUser) throws RemoteException {
         return userJpaController.findUser(idUser);
+    }
+    
+    /*Metodos correspondientes al CRUD de Address */    
+    public void createAddress(Address address) throws RemoteException{
+        addressJpaController.create(address);
+    }
+    
+    public void editAddress(Address address)  throws RemoteException, Exception {
+        addressJpaController.edit(address);
+    }
+    
+    public void destroyAddress(Address address) throws RemoteException, Exception{
+        addressJpaController.destroy(address.getAddressId());
+    }
+    
+    public List<Address> getAddressList()throws RemoteException{
+        return addressJpaController.findAddressEntities();
+    }
+    
+    public Address findAddress(Integer idAddress) throws RemoteException{
+        return addressJpaController.findAddress(idAddress);
+    }
+    
+      /*Metodos correspondientes al CRUD de Catalog */    
+    public void createCatalog(Catalog catalog) throws RemoteException{
+        catalogJpaController.create(catalog);
+    }
+    
+    public void editCatalog(Catalog catalog)  throws RemoteException, Exception {
+        catalogJpaController.edit(catalog);
+    }
+    
+    public void destroyCatalog(Catalog catalog) throws RemoteException, Exception{
+        catalogJpaController.destroy(catalog.getCatalogId());
+    }
+    
+    public List<Catalog> getCatalogList()throws RemoteException{
+        return catalogJpaController.findCatalogEntities();
+    }
+    
+    public Catalog findCatalog(Integer idCatalog) throws RemoteException{
+        return catalogJpaController.findCatalog(idCatalog);
+    }
+    
+    /*Metodos correspondientes al CRUD de Category */    
+    public void createCategory(Category category) throws RemoteException{
+        categoryJpaController.create(category);
+    }
+    
+    public void editCategory(Category category)  throws RemoteException, Exception {
+        categoryJpaController.edit(category);
+    }
+    
+    public void destroyCategory(Category category) throws RemoteException, Exception{
+        categoryJpaController.destroy(category.getCategoryId());
+    }
+    
+    public List<Category> getCategoryList()throws RemoteException{
+        return categoryJpaController.findCategoryEntities();
+    }
+    
+    public Category findCategory(Integer idCategory) throws RemoteException{
+        return categoryJpaController.findCategory(idCategory);
+    }
+    
+    /*Metodos correspondientes al CRUD de City */    
+    public void createCity(City city) throws RemoteException{
+        cityJpaController.create(city);
+    }
+    
+    public void editCity(City city)  throws RemoteException, Exception {
+        cityJpaController.edit(city);
+    }
+    
+    public void destroyCity(City city) throws RemoteException, Exception{
+        cityJpaController.destroy(city.getCityId());
+    }
+    
+    public List<City> getCityList()throws RemoteException{
+        return cityJpaController.findCityEntities();
+    }
+    
+    public City findCity(Integer idCity) throws RemoteException{
+        return cityJpaController.findCity(idCity);
+    }
+    
+    /*Metodos correspondientes al CRUD de Client */    
+    public void createClient(Client client) throws RemoteException{
+        clientJpaController.create(client);
+    }
+    
+    public void editClient(Client client)  throws RemoteException, Exception {
+        clientJpaController.edit(client);
+    }
+    
+    public void destroyClient(Client client) throws RemoteException, Exception{
+        clientJpaController.destroy(client.getClientId());
+    }
+    
+    public List<Client> getClientList()throws RemoteException{
+        return clientJpaController.findClientEntities();
+    }
+    
+    public Client findClient(Integer idClient) throws RemoteException{
+        return clientJpaController.findClient(idClient);
+    }
+    
+     /*Metodos correspondientes al CRUD de Company */    
+    public void createCompany(Company company) throws RemoteException{
+        companyJpaController.create(company);
+    }
+    
+    public void editCompany(Company company)  throws RemoteException, Exception {
+        companyJpaController.edit(company);
+    }
+    
+    public void destroyCompany(Company company) throws RemoteException, Exception{
+        companyJpaController.destroy(company.getCompanyId());
+    }
+    
+    public List<Company> getCompanyList()throws RemoteException{
+        return companyJpaController.findCompanyEntities();
+    }
+    
+    public Company findCompany(Integer idCompany) throws RemoteException{
+        return companyJpaController.findCompany(idCompany);
+    }
+    
+      /*Metodos correspondientes al CRUD de Country */    
+    public void createCountry(Country country) throws RemoteException{
+        countryJpaController.create(country);
+    }
+    
+    public void editCountry(Country country)  throws RemoteException, Exception {
+        countryJpaController.edit(country);
+    }
+    
+    public void destroyCountry(Country country) throws RemoteException, Exception{
+        countryJpaController.destroy(country.getCountryId());
+    }
+    
+    public List<Country> getCountryList()throws RemoteException{
+        return countryJpaController.findCountryEntities();
+    }
+    
+    public Country findCountry(Integer idCountry) throws RemoteException{
+        return countryJpaController.findCountry(idCountry);
+    }
+    
+     /*Metodos correspondientes al CRUD de Item */    
+    public void createItem(Item item) throws RemoteException{
+        itemJpaController.create(item);
+    }
+    
+    public void editItem(Item item)  throws RemoteException, Exception {
+        itemJpaController.edit(item);
+    }
+    
+    public void destroyItem(Item item) throws RemoteException, Exception{
+        itemJpaController.destroy(item.getItemId());
+    }
+    
+    public List<Item> getItemList()throws RemoteException{
+        return itemJpaController.findItemEntities();
+    }
+    
+    public Item findItem(Integer idItem) throws RemoteException{
+        return itemJpaController.findItem(idItem);
+    }
+    
+       /*Metodos correspondientes al CRUD de Product */    
+    public void createProduct(Product product) throws RemoteException{
+        productJpaController.create(product);
+    }
+    
+    public void editProduct(Product product)  throws RemoteException, Exception {
+        productJpaController.edit(product);
+    }
+    
+    public void destroyProduct(Product product) throws RemoteException, Exception{
+        productJpaController.destroy(product.getProductId());
+    }
+    
+    public List<Product> getProductList()throws RemoteException{
+        return productJpaController.findProductEntities();
+    }
+    
+    public Product findProduct(Integer idProduct) throws RemoteException{
+        return productJpaController.findProduct(idProduct);
     }
 }

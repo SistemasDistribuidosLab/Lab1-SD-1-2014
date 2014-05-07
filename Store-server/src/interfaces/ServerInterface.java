@@ -33,4 +33,69 @@ public interface ServerInterface extends Remote{
     public void destroyUser(User user) throws RemoteException, Exception;
     public List<User> getUserList() throws RemoteException;
     public User findUser(Integer idUser) throws RemoteException;
+    
+     /*  Métodos correspondientes al CRUD de Address*/
+    public void createAddress(Address address) throws RemoteException;    
+    public void editAddress(Address address) throws RemoteException, Exception;
+    public void destroyAddress(Address address)throws RemoteException, Exception;
+    public List<Address> getAddressList() throws RemoteException;
+    public Address findAddress(Integer idAddress) throws RemoteException;
+    
+      /*  Métodos correspondientes al CRUD de Catalog*/
+    public void createCatalog(Catalog catalog) throws RemoteException;    
+    public void editCatalog(Catalog catalog) throws RemoteException, Exception;
+    public void destroyCatalog(Catalog catalog)throws RemoteException, Exception;
+    public List<Catalog> getCatalogList() throws RemoteException;
+    public Catalog findCatalog(Integer idCatalog) throws RemoteException;
+    
+      /*  Métodos correspondientes al CRUD de Category*/
+    public void createCategory(Category category) throws RemoteException;    
+    public void editCategory(Category category) throws RemoteException, Exception;
+    public void destroyCategory(Category category)throws RemoteException, Exception;
+    public List<Category> getCategoryList() throws RemoteException;
+    public Category findCategory(Integer idCategory) throws RemoteException;
+    
+      /*  Métodos correspondientes al CRUD de City*/
+    public void createCity(City city) throws RemoteException;    
+    public void editCity(City city) throws RemoteException, Exception;
+    public void destroyCity(City city)throws RemoteException, Exception;
+    public List<City> getCityList() throws RemoteException;
+    public City findCity(Integer idCity) throws RemoteException;
+    
+       /*  Métodos correspondientes al CRUD de Client*/
+    public void createClient(Client client) throws RemoteException;    
+    public void editClient(Client client) throws RemoteException, Exception;
+    public void destroyClient(Client client)throws RemoteException, Exception;
+    public List<Client> getClientList() throws RemoteException;
+    public Client findClient(Integer idClient) throws RemoteException;
+    
+       /*  Métodos correspondientes al CRUD de Company*/
+    public void createCompany(Company company) throws RemoteException;    
+    public void editCompany(Company company) throws RemoteException, Exception;
+    public void destroyCompany(Company company)throws RemoteException, Exception;
+    public List<Company> getCompanyList() throws RemoteException;
+    public Company findCompany(Integer idCompany) throws RemoteException;
+    
+       /*  Métodos correspondientes al CRUD de Country*/
+    public void createCountry(Country country) throws RemoteException;    
+    public void editCountry(Country country) throws RemoteException, Exception;
+    public void destroyCountry(Country country)throws RemoteException, Exception;
+    public List<Country> getCountryList() throws RemoteException;
+    public Country findCountry(Integer idCountry) throws RemoteException;
+    
+         /*  Métodos correspondientes al CRUD de Item*/
+    public void createItem(Item item) throws RemoteException;    
+    public void editItem(Item item) throws RemoteException, Exception;
+    public void destroyItem(Item item)throws RemoteException, Exception;
+    public List<Item> getItemList() throws RemoteException;
+    public Item findItem(Integer idItem) throws RemoteException;
+    
+         /*  Métodos correspondientes al CRUD de Product*/
+    public void createProduct(Product product) throws RemoteException;    
+    public void editProduct(Product product) throws RemoteException, Exception;
+    public void destroyProduct(Product product)throws RemoteException, Exception;
+    public List<Product> getProductList() throws RemoteException;
+    public Product findProduct(Integer idProduct) throws RemoteException;
+    
+  
 }
