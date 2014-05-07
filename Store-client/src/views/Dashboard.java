@@ -7,10 +7,12 @@
 package views;
 
 import entities.*;
+import java.awt.Component;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import otherclasses.ComboItem;
 import storeclient.ConnectionRMI;
 
@@ -28,6 +30,9 @@ public class Dashboard extends javax.swing.JFrame {
     public Dashboard(ConnectionRMI conn) {
         initComponents();
         this.connection = conn;
+        /*  Se establecen los items del ComboBox de búsqueda de usuarios    */
+        this.jComboBoxUserSearchType.addItem(new ComboItem("Nombre de usuario", 1));
+        this.jComboBoxUserSearchType.addItem(new ComboItem("Email de usuario", 2));
     }
 
     /**
@@ -44,10 +49,10 @@ public class Dashboard extends javax.swing.JFrame {
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
-        jTextField1 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox();
-        jButton1 = new javax.swing.JButton();
+        jListUserList = new javax.swing.JList();
+        jTextFieldUserSearch = new javax.swing.JTextField();
+        jComboBoxUserSearchType = new javax.swing.JComboBox();
+        jButtonUserSearch = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
@@ -62,10 +67,21 @@ public class Dashboard extends javax.swing.JFrame {
         jTextFieldConfirmPassword = new javax.swing.JTextField();
         jButtonUserCreate = new javax.swing.JButton();
         jComboBoxUserRole = new javax.swing.JComboBox();
-        jLabelMandatoryFields = new javax.swing.JLabel();
+        jLabelUserMandatoryFields = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabelPasswordConsistency = new javax.swing.JLabel();
-        jLabelSuccessCreate = new javax.swing.JLabel();
+        jLabelUserPasswordConsistency = new javax.swing.JLabel();
+        jLabelUserSuccessCreate = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        jPanel10 = new javax.swing.JPanel();
+        jPanel11 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jTextFieldRoleName = new javax.swing.JTextField();
+        jTextFieldRoleDescription = new javax.swing.JTextField();
+        jButtonRoleCreate = new javax.swing.JButton();
+        jLabelRoleMandatoryFields = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabelRoleSuccessCreate = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -80,24 +96,27 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jList1);
-        jList1.getAccessibleContext().setAccessibleName("jListUser");
+        jScrollPane1.setViewportView(jListUserList);
+        jListUserList.getAccessibleContext().setAccessibleName("jListUser");
 
-        jTextField1.setText("Buscar usuarios");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        jTextFieldUserSearch.setText("Buscar usuarios");
+        jTextFieldUserSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextFieldUserSearchMouseClicked(evt);
+            }
+        });
+        jTextFieldUserSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                jTextFieldUserSearchActionPerformed(evt);
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-----" }));
-
-        jButton1.setText("Buscar");
+        jButtonUserSearch.setText("Buscar");
+        jButtonUserSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonUserSearchMouseClicked(evt);
+            }
+        });
 
         jButton2.setText("Editar");
 
@@ -111,11 +130,11 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                        .addComponent(jTextFieldUserSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBoxUserSearchType, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButtonUserSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton3)
@@ -128,9 +147,9 @@ public class Dashboard extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(jTextFieldUserSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxUserSearchType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonUserSearch))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -140,13 +159,13 @@ public class Dashboard extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTextField1.getAccessibleContext().setAccessibleName("jTextFieldSearchUser");
-        jComboBox1.getAccessibleContext().setAccessibleName("jComboBoxUserSearchType");
-        jButton1.getAccessibleContext().setAccessibleName("jButtonSearchUser");
+        jTextFieldUserSearch.getAccessibleContext().setAccessibleName("jTextFieldSearchUser");
+        jComboBoxUserSearchType.getAccessibleContext().setAccessibleName("jComboBoxUserSearchType");
+        jButtonUserSearch.getAccessibleContext().setAccessibleName("jButtonSearchUser");
         jButton2.getAccessibleContext().setAccessibleName("jButtonEditUser");
         jButton3.getAccessibleContext().setAccessibleName("jButtonUserDestroy");
 
-        jTabbedPane2.addTab("Listar", jPanel8);
+        jTabbedPane2.addTab("Listar Usuarios", jPanel8);
         jPanel8.getAccessibleContext().setAccessibleName("tabListUsers");
 
         jLabel1.setText("Nombre de usuario:");
@@ -166,16 +185,16 @@ public class Dashboard extends javax.swing.JFrame {
             }
         });
 
-        jLabelMandatoryFields.setForeground(new java.awt.Color(255, 0, 0));
-        jLabelMandatoryFields.setText("Debe completar los campos obligatorios.");
+        jLabelUserMandatoryFields.setForeground(new java.awt.Color(255, 0, 0));
+        jLabelUserMandatoryFields.setText("Debe completar los campos obligatorios.");
 
         jLabel7.setText("(*) Campos obligatorios.");
 
-        jLabelPasswordConsistency.setForeground(new java.awt.Color(255, 0, 0));
-        jLabelPasswordConsistency.setText("Ambas contraseñas deben ser iguales.");
+        jLabelUserPasswordConsistency.setForeground(new java.awt.Color(255, 0, 0));
+        jLabelUserPasswordConsistency.setText("Ambas contraseñas deben ser iguales.");
 
-        jLabelSuccessCreate.setForeground(new java.awt.Color(18, 221, 1));
-        jLabelSuccessCreate.setText("¡El usuario se ha creado exitosamente!");
+        jLabelUserSuccessCreate.setForeground(new java.awt.Color(18, 221, 1));
+        jLabelUserSuccessCreate.setText("¡El usuario se ha creado exitosamente!");
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -203,9 +222,9 @@ public class Dashboard extends javax.swing.JFrame {
                                 .addComponent(jTextFieldUserEmail)
                                 .addComponent(jTextFieldConfirmPassword)
                                 .addComponent(jComboBoxUserRole, 0, 246, Short.MAX_VALUE))))
-                    .addComponent(jLabelMandatoryFields)
-                    .addComponent(jLabelPasswordConsistency)
-                    .addComponent(jLabelSuccessCreate))
+                    .addComponent(jLabelUserMandatoryFields)
+                    .addComponent(jLabelUserPasswordConsistency)
+                    .addComponent(jLabelUserSuccessCreate))
                 .addContainerGap(67, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
@@ -236,17 +255,130 @@ public class Dashboard extends javax.swing.JFrame {
                     .addComponent(jButtonUserCreate)
                     .addComponent(jLabel7))
                 .addGap(18, 18, 18)
-                .addComponent(jLabelMandatoryFields)
+                .addComponent(jLabelUserMandatoryFields)
                 .addGap(18, 18, 18)
-                .addComponent(jLabelPasswordConsistency)
+                .addComponent(jLabelUserPasswordConsistency)
                 .addGap(18, 18, 18)
-                .addComponent(jLabelSuccessCreate)
+                .addComponent(jLabelUserSuccessCreate)
                 .addContainerGap(39, Short.MAX_VALUE))
         );
 
-        jTabbedPane2.addTab("Nuevo", jPanel9);
+        jTabbedPane2.addTab("Nuevo Usuario", jPanel9);
         jPanel9.getAccessibleContext().setAccessibleName("tabNewUser");
         jPanel9.getAccessibleContext().setAccessibleDescription("");
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 488, Short.MAX_VALUE)
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 362, Short.MAX_VALUE)
+        );
+
+        jTabbedPane2.addTab("Listar Roles", jPanel7);
+
+        jPanel10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel10MouseClicked(evt);
+            }
+        });
+
+        jPanel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel11MouseClicked(evt);
+            }
+        });
+
+        jLabel6.setText("Nombre de Rol*:");
+
+        jLabel10.setText("Descripción del Rol:");
+
+        jButtonRoleCreate.setText("Registrar");
+        jButtonRoleCreate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonRoleCreateMouseClicked(evt);
+            }
+        });
+
+        jLabelRoleMandatoryFields.setForeground(new java.awt.Color(255, 0, 0));
+        jLabelRoleMandatoryFields.setText("Debe completar los campos obligatorios.");
+
+        jLabel12.setText("(*) Campos obligatorios.");
+
+        jLabelRoleSuccessCreate.setForeground(new java.awt.Color(18, 221, 1));
+        jLabelRoleSuccessCreate.setText("¡El rol se ha creado exitosamente!");
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel11Layout.createSequentialGroup()
+                            .addComponent(jLabel12)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
+                            .addComponent(jButtonRoleCreate))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel11Layout.createSequentialGroup()
+                            .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel10)
+                                .addComponent(jLabel6))
+                            .addGap(28, 28, 28)
+                            .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jTextFieldRoleName, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                                .addComponent(jTextFieldRoleDescription))))
+                    .addComponent(jLabelRoleMandatoryFields)
+                    .addComponent(jLabelRoleSuccessCreate))
+                .addContainerGap(67, Short.MAX_VALUE))
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldRoleName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldRoleDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(jButtonRoleCreate))
+                .addGap(18, 18, 18)
+                .addComponent(jLabelRoleMandatoryFields)
+                .addGap(18, 18, 18)
+                .addComponent(jLabelRoleSuccessCreate)
+                .addContainerGap(161, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 488, Short.MAX_VALUE)
+            .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel10Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 362, Short.MAX_VALUE)
+            .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel10Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        jTabbedPane2.addTab("Nuevo Rol", jPanel10);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -347,9 +479,9 @@ public class Dashboard extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void jTextFieldUserSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldUserSearchActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_jTextFieldUserSearchActionPerformed
 
     private void jTabbedPane2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane2MouseClicked
         // Nuevo Usuario Click Tab
@@ -360,17 +492,22 @@ public class Dashboard extends javax.swing.JFrame {
         } catch(Exception e){
             e.printStackTrace();
         }
-        for (int i = 0; i < roleList.size(); i++) {
-            this.jComboBoxUserRole.addItem(new ComboItem(
-                        roleList.get(i).getRoleName(),
-                        roleList.get(i).getRoleId()));
-        }  
+        if(!roleList.isEmpty()){
+            for (int i = 0; i < roleList.size(); i++) {
+                this.jComboBoxUserRole.addItem(new ComboItem(
+                            roleList.get(i).getRoleName(),
+                            roleList.get(i).getRoleId()));
+            }  
+        }
+        
         /*  Mandatory Fields    */
-        this.jLabelMandatoryFields.setVisible(false);
+        this.jLabelRoleMandatoryFields.setVisible(false);
+        this.jLabelUserMandatoryFields.setVisible(false);
         /*  Password Consisntency   */
-        this.jLabelPasswordConsistency.setVisible(false);
-        /*  Success Creating the User   */
-        this.jLabelSuccessCreate.setVisible(false);
+        this.jLabelUserPasswordConsistency.setVisible(false);
+        /*  Success Creating   */        
+        this.jLabelRoleSuccessCreate.setVisible(false);
+        this.jLabelUserSuccessCreate.setVisible(false);
     }//GEN-LAST:event_jTabbedPane2MouseClicked
 
     private void jButtonUserCreateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonUserCreateMouseClicked
@@ -382,18 +519,18 @@ public class Dashboard extends javax.swing.JFrame {
         //Validación Mandatory Fields
         Boolean userCreable = true;
         if (userEmail.isEmpty()||userPasswordOne.isEmpty()&&userPasswordTwo.isEmpty()) {
-            this.jLabelMandatoryFields.setVisible(true);
+            this.jLabelUserMandatoryFields.setVisible(true);
             userCreable = false;
         }
         //Validación comparación de Paswords 
         if (!userPasswordOne.contentEquals(userPasswordTwo)) {
-            this.jLabelPasswordConsistency.setVisible(true);
+            this.jLabelUserPasswordConsistency.setVisible(true);
             userCreable = false;
         }
         //Si el usuario es creable
         if (userCreable) {
-            this.jLabelMandatoryFields.setVisible(false);
-            this.jLabelPasswordConsistency.setVisible(false);
+            this.jLabelUserMandatoryFields.setVisible(false);
+            this.jLabelUserPasswordConsistency.setVisible(false);
             /*  Pre-Persistence */
             User user = new User();
             user.setUserName(userName);
@@ -414,7 +551,7 @@ public class Dashboard extends javax.swing.JFrame {
                 //Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
             }
             /*  Success Message */
-            this.jLabelSuccessCreate.setVisible(true);
+            this.jLabelUserSuccessCreate.setVisible(true);
             /*  Cleaning Fields */
             this.jTextFieldUserName.setText("");
             this.jTextFieldUserEmail.setText("");
@@ -424,43 +561,124 @@ public class Dashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonUserCreateMouseClicked
 
+    private void jButtonRoleCreateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonRoleCreateMouseClicked
+        // TODO add your handling code here:
+        String roleName = this.jTextFieldRoleName.getText();
+        String roleDescription = this.jTextFieldRoleDescription.getText();
+        //Validación Mandatory Fields
+        Boolean roleCreable = true;
+        if (roleName.isEmpty()) {
+            this.jLabelRoleMandatoryFields.setVisible(true);
+            roleCreable = false;
+        }
+        //Si el usuario es creable
+        if (roleCreable) {
+            this.jLabelRoleMandatoryFields.setVisible(false);
+            this.jLabelRoleSuccessCreate.setVisible(false);
+            /*  Pre-Persistence */
+            Role role = new Role();
+            role.setRoleName(roleName);
+            role.setRoleDescription(roleDescription);
+            /*  Persistence */
+            try {
+                connection.getServer().createRole(role);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                //Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            /*  Success Message */
+            this.jLabelRoleSuccessCreate.setVisible(true);
+            /*  Cleaning Fields */
+            this.jTextFieldRoleName.setText("");
+            this.jTextFieldRoleDescription.setText("");
+        }
+    }//GEN-LAST:event_jButtonRoleCreateMouseClicked
+
+    private void jPanel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel11MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPanel11MouseClicked
+
+    private void jPanel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel10MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPanel10MouseClicked
+
+    private void jTextFieldUserSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldUserSearchMouseClicked
+        // TODO add your handling code here:
+        this.jTextFieldUserSearch.setText("");
+    }//GEN-LAST:event_jTextFieldUserSearchMouseClicked
+
+    private void jButtonUserSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonUserSearchMouseClicked
+        // TODO add your handling code here:
+        DefaultListModel model = new DefaultListModel();
+        if (this.jTextFieldUserSearch.getText().contentEquals("")||
+                this.jTextFieldUserSearch.getText().contentEquals("Buscar usuarios")) {
+            List<User> userList = null;
+            try {
+                userList = connection.getServer().getUserList();
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+                //Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (!userList.isEmpty()) {
+                for (int i = 0; i < userList.size(); i++) {
+                    model.addElement(userList.get(i).getUserName()+", "+userList.get(i).getUserEmail());
+                    
+                    //model.addElement(new ComboItem(userList.get(i).getUserName(),
+                    //                                userList.get(i).getUserId()));
+                }
+                this.jListUserList.setModel(model);
+            }
+        }
+    }//GEN-LAST:event_jButtonUserSearchMouseClicked
+
     /**
      * @param args the command line arguments
      */
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButtonRoleCreate;
     private javax.swing.JButton jButtonUserCreate;
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JButton jButtonUserSearch;
     private javax.swing.JComboBox jComboBoxUserRole;
+    private javax.swing.JComboBox jComboBoxUserSearchType;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabelMandatoryFields;
-    private javax.swing.JLabel jLabelPasswordConsistency;
-    private javax.swing.JLabel jLabelSuccessCreate;
-    private javax.swing.JList jList1;
+    private javax.swing.JLabel jLabelRoleMandatoryFields;
+    private javax.swing.JLabel jLabelRoleSuccessCreate;
+    private javax.swing.JLabel jLabelUserMandatoryFields;
+    private javax.swing.JLabel jLabelUserPasswordConsistency;
+    private javax.swing.JLabel jLabelUserSuccessCreate;
+    private javax.swing.JList jListUserList;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextFieldConfirmPassword;
     private javax.swing.JTextField jTextFieldPassword;
+    private javax.swing.JTextField jTextFieldRoleDescription;
+    private javax.swing.JTextField jTextFieldRoleName;
     private javax.swing.JTextField jTextFieldUserEmail;
     private javax.swing.JTextField jTextFieldUserName;
+    private javax.swing.JTextField jTextFieldUserSearch;
     // End of variables declaration//GEN-END:variables
 }
