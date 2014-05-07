@@ -19,6 +19,9 @@ public interface ServerInterface extends Remote{
     public boolean sessionBegin(String name, String pass) throws RemoteException;
     public void clientRegistry(ClientInterface client, String name) throws RemoteException;
     public void clientUnregistry(ClientInterface client, String name) throws RemoteException;
+    public void enviarMensaje(String emisor, String receptor, String mensaje) throws RemoteException;
+    public void AbrirChat(String emisor, String receptor) throws RemoteException;
+    public void meDesconecte(String usuario) throws RemoteException;
     
     /*  Métodos correspondientes al CRUD de ROLE*/
     public void createRole(Role role) throws RemoteException;

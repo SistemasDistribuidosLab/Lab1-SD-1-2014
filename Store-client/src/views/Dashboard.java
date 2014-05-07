@@ -3,16 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package views;
 
 import entities.*;
+import java.awt.Color;
 import java.awt.Component;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.text.BadLocationException;
 import otherclasses.ComboItem;
 import storeclient.ConnectionRMI;
 
@@ -22,17 +26,140 @@ import storeclient.ConnectionRMI;
  */
 public class Dashboard extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Dashboard
-     */
-    private ConnectionRMI connection;
-    
-    public Dashboard(ConnectionRMI conn) {
+    ArrayList Conectados = new ArrayList();
+    private ConnectionRMI connection = new ConnectionRMI();
+    private String MiNombre;
+    ArrayList Chats = new ArrayList();
+
+    public Dashboard(ConnectionRMI conn, String MiNombre) {
         initComponents();
+        this.MiNombre = MiNombre;
+        this.WarningLabel.setVisible(false);
+        System.out.println("Mi nombre es: " + MiNombre);
+        UsernameLabel.setText("Bienvenido " + MiNombre);
+        ListConectados.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (ListConectados.getSelectedValuesList().size() > 0) {
+                    IniciarChatButton.setEnabled(true);
+                } else {
+                    IniciarChatButton.setEnabled(false);
+                }
+            }
+        });
+        IniciarChatButton.setEnabled(false);
         this.connection = conn;
         /*  Se establecen los items del ComboBox de búsqueda de usuarios    */
         this.jComboBoxUserSearchType.addItem(new ComboItem("Nombre de usuario", 1));
         this.jComboBoxUserSearchType.addItem(new ComboItem("Email de usuario", 2));
+    }
+
+    public void warning(String message) {
+        //this.WarningLabel.setText("Se conecto: " + message);
+        this.WarningLabel.setVisible(false);
+            //Thread thread = new Thread((Runnable) new Delay(this));
+        //thread.start();
+    }
+
+    public void AgregarConectado(String nombre) throws RemoteException {
+        if (!Conectados.contains(nombre)) {
+            Conectados.add(nombre);
+        }
+        for (int i = 0; i < Chats.size(); i++) {
+            Chat a = (Chat) Chats.get(i);
+            if (nombre.equals(a.NombreReceptor)) {
+                System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!");
+                System.out.println("\t!!!!!!");
+                Chat ChatReceptor = (Chat) Chats.get(i);
+                a.activarBotonEnviar(true);
+                a.activarTextField(true);
+                //a.activarTextArea(true);
+                if (connection.beginRegistry()) {
+                    //System.out.println("enviarMensaje( " + MiNombre + ", "+ nombre_receptor + ", Hola Mundo 2 !!!" );
+                    connection.getServer().enviarMensaje(MiNombre, nombre, "");
+                }
+            }
+        }
+        ListConectados.setModel(ObtenerDefaultListModel());
+        //this.IniciarChatButton.setEnabled(true);
+    }
+
+    private void AbrirChat(java.awt.event.MouseEvent evt) throws RemoteException {//GEN-FIRST:event_AbrirChat
+        if (!ListConectados.isSelectionEmpty()) {
+            Chat Chat;
+            String receptor = this.ListConectados.getSelectedValue().toString();
+            Boolean existeChat = false;
+            int index_chat = -1;
+            for (int i = 0; i < Chats.size(); i++) {
+                Chat a = (Chat) Chats.get(i);
+                if (receptor.equals(a.NombreReceptor)) {
+                    existeChat = true;
+                    index_chat = i;
+                }
+            }
+            if (!existeChat) {
+                Chat = new Chat(MiNombre, ListConectados.getSelectedValue().toString(), true);
+                int centro_x_padre = this.getLocation().x + this.getWidth() / 2;
+                int centro_y_padre = this.getLocation().y + this.getHeight() / 2;
+                Chat.setLocation(centro_x_padre, centro_y_padre);
+                Chat.setVisible(true);
+                Chat.activarBotonEnviar(true);
+                Chat.activarTextField(true);
+                //Chat.activarTextArea(true);
+                Chats.add(Chat);
+            } else {
+                Chat activo = (Chat) Chats.get(index_chat);
+                activo.setVisible(true);
+                activo.activarBotonEnviar(true);
+                activo.activarTextField(true);
+                //activo.activarTextArea(true);
+            }
+        } else {
+            this.IniciarChatButton.setEnabled(false);
+        }
+        //this.setVisible(false);
+    }//GEN-LAST:event_AbrirChat
+
+    public DefaultListModel ObtenerDefaultListModel() {
+        this.UsernameLabel.repaint();
+        DefaultListModel model = new DefaultListModel();
+        for (int i = 0; i < Conectados.size(); i++) {
+            System.out.println("Lista: " + Conectados.get(i).toString());
+            model.addElement(Conectados.get(i));
+        }
+        return model;
+    }
+
+    public void AbrirChat(String emisor, String receptor, String mensaje) throws RemoteException, BadLocationException {
+        Boolean estaAbierto = false;
+        System.out.println("AbrirChat(" + emisor + ", " + receptor + ", " + mensaje + ");");
+        for (int i = 0; i < Chats.size(); i++) {
+            Chat a = (Chat) Chats.get(i);
+            System.out.println("Comparando: " + emisor + ", " + receptor + ", " + a.MiNombre + ", " + a.NombreReceptor);
+            if (emisor.equals(a.MiNombre) && receptor.equals(a.NombreReceptor)) {
+                if (a.PrimerMensaje) {
+                    a.PrimerMensaje = false;
+                } else {
+                    //a.appendText("se conecto...\n", Color.GREEN);
+                }
+                System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!");
+                System.out.println("\t!!!!!!");
+                estaAbierto = true;
+                Chat ChatReceptor = (Chat) Chats.get(i);
+                a.activarBotonEnviar(true);
+                a.activarTextField(true);
+                //a.activarTextArea(true);
+                //ChatReceptor.setVisible(true);
+                ChatReceptor.AgregarMensaje(receptor, mensaje);
+            }
+        }
+        if (!estaAbierto) {
+            System.out.println("neu Chat(" + emisor + ", " + receptor + ", false)");
+            Chat Nuevo = new Chat(emisor, receptor, false);
+            //Nuevo.setVisible(true);
+            //Nuevo.AgregarMensaje(mensaje);
+            Chats.add(Nuevo);
+        }
     }
 
     /**
@@ -82,6 +209,11 @@ public class Dashboard extends javax.swing.JFrame {
         jLabelRoleMandatoryFields = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabelRoleSuccessCreate = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        ListConectados = new javax.swing.JList();
+        UsernameLabel = new javax.swing.JLabel();
+        IniciarChatButton = new javax.swing.JButton();
+        WarningLabel = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -89,6 +221,11 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jTabbedPane2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -130,7 +267,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addComponent(jTextFieldUserSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                        .addComponent(jTextFieldUserSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBoxUserSearchType, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -206,7 +343,7 @@ public class Dashboard extends javax.swing.JFrame {
                     .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(jPanel9Layout.createSequentialGroup()
                             .addComponent(jLabel7)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 174, Short.MAX_VALUE)
                             .addComponent(jButtonUserCreate))
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel9Layout.createSequentialGroup()
                             .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,7 +362,7 @@ public class Dashboard extends javax.swing.JFrame {
                     .addComponent(jLabelUserMandatoryFields)
                     .addComponent(jLabelUserPasswordConsistency)
                     .addComponent(jLabelUserSuccessCreate))
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -260,7 +397,7 @@ public class Dashboard extends javax.swing.JFrame {
                 .addComponent(jLabelUserPasswordConsistency)
                 .addGap(18, 18, 18)
                 .addComponent(jLabelUserSuccessCreate)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Nuevo Usuario", jPanel9);
@@ -271,11 +408,11 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 488, Short.MAX_VALUE)
+            .addGap(0, 347, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 362, Short.MAX_VALUE)
+            .addGap(0, 335, Short.MAX_VALUE)
         );
 
         jTabbedPane2.addTab("Listar Roles", jPanel7);
@@ -321,7 +458,7 @@ public class Dashboard extends javax.swing.JFrame {
                     .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(jPanel11Layout.createSequentialGroup()
                             .addComponent(jLabel12)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 173, Short.MAX_VALUE)
                             .addComponent(jButtonRoleCreate))
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel11Layout.createSequentialGroup()
                             .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -361,7 +498,7 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 488, Short.MAX_VALUE)
+            .addGap(0, 444, Short.MAX_VALUE)
             .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel10Layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -370,7 +507,7 @@ public class Dashboard extends javax.swing.JFrame {
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 362, Short.MAX_VALUE)
+            .addGap(0, 335, Short.MAX_VALUE)
             .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel10Layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -380,15 +517,52 @@ public class Dashboard extends javax.swing.JFrame {
 
         jTabbedPane2.addTab("Nuevo Rol", jPanel10);
 
+        jScrollPane2.setViewportView(ListConectados);
+
+        UsernameLabel.setText("Bienvenido");
+
+        IniciarChatButton.setText("Iniciar Chat");
+        IniciarChatButton.setEnabled(false);
+        IniciarChatButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                IniciarChatButtonMouseClicked(evt);
+            }
+        });
+
+        WarningLabel.setText("Se conecto");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(UsernameLabel)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(WarningLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                                .addComponent(IniciarChatButton))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jTabbedPane2)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(UsernameLabel)
+                .addGap(5, 5, 5)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(IniciarChatButton)
+                    .addComponent(WarningLabel))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane2.getAccessibleContext().setAccessibleName("tabPanelUser");
@@ -399,11 +573,11 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 496, Short.MAX_VALUE)
+            .addGap(0, 572, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 399, Short.MAX_VALUE)
+            .addGap(0, 363, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Proveedores", jPanel2);
@@ -412,11 +586,11 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 496, Short.MAX_VALUE)
+            .addGap(0, 572, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 399, Short.MAX_VALUE)
+            .addGap(0, 363, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Catálogos", jPanel3);
@@ -425,11 +599,11 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 496, Short.MAX_VALUE)
+            .addGap(0, 572, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 399, Short.MAX_VALUE)
+            .addGap(0, 363, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Categorías", jPanel4);
@@ -438,11 +612,11 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 496, Short.MAX_VALUE)
+            .addGap(0, 572, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 399, Short.MAX_VALUE)
+            .addGap(0, 363, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Productos", jPanel5);
@@ -451,11 +625,11 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 496, Short.MAX_VALUE)
+            .addGap(0, 572, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 399, Short.MAX_VALUE)
+            .addGap(0, 363, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Clientes", jPanel6);
@@ -489,23 +663,23 @@ public class Dashboard extends javax.swing.JFrame {
         List<Role> roleList = null;
         try {
             roleList = connection.getServer().getRoleList();
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        if(!roleList.isEmpty()){
+        if (!roleList.isEmpty()) {
             for (int i = 0; i < roleList.size(); i++) {
                 this.jComboBoxUserRole.addItem(new ComboItem(
-                            roleList.get(i).getRoleName(),
-                            roleList.get(i).getRoleId()));
-            }  
+                        roleList.get(i).getRoleName(),
+                        roleList.get(i).getRoleId()));
+            }
         }
-        
+
         /*  Mandatory Fields    */
         this.jLabelRoleMandatoryFields.setVisible(false);
         this.jLabelUserMandatoryFields.setVisible(false);
         /*  Password Consisntency   */
         this.jLabelUserPasswordConsistency.setVisible(false);
-        /*  Success Creating   */        
+        /*  Success Creating   */
         this.jLabelRoleSuccessCreate.setVisible(false);
         this.jLabelUserSuccessCreate.setVisible(false);
     }//GEN-LAST:event_jTabbedPane2MouseClicked
@@ -518,7 +692,7 @@ public class Dashboard extends javax.swing.JFrame {
         String userPasswordTwo = this.jTextFieldConfirmPassword.getText();
         //Validación Mandatory Fields
         Boolean userCreable = true;
-        if (userEmail.isEmpty()||userPasswordOne.isEmpty()&&userPasswordTwo.isEmpty()) {
+        if (userEmail.isEmpty() || userPasswordOne.isEmpty() && userPasswordTwo.isEmpty()) {
             this.jLabelUserMandatoryFields.setVisible(true);
             userCreable = false;
         }
@@ -557,7 +731,7 @@ public class Dashboard extends javax.swing.JFrame {
             this.jTextFieldUserEmail.setText("");
             this.jTextFieldPassword.setText("");
             this.jTextFieldConfirmPassword.setText("");
-            
+
         }
     }//GEN-LAST:event_jButtonUserCreateMouseClicked
 
@@ -594,6 +768,28 @@ public class Dashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonRoleCreateMouseClicked
 
+    public void seDesconecto(String message) throws BadLocationException {
+        Conectados.remove(message);
+        ListConectados.setModel(ObtenerDefaultListModel());
+        for (int i = 0; i < Chats.size(); i++) {
+            Chat a = (Chat) Chats.get(i);
+            System.out.println(a.NombreReceptor + " y " + message);
+            if (a.NombreReceptor.equals(message)) {
+                //Chats.remove(i);
+                //a.setVisible(false);
+                //a.setVisible(false);
+                a.activarBotonEnviar(false);
+                a.activarTextField(false);
+                //a.activarTextArea(false);
+                a.MostrarMensaje = false;
+
+                a.appendText("se desconecto...\n", Color.RED);
+
+                i = 0;
+            }
+        }
+    }
+
     private void jPanel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel11MouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_jPanel11MouseClicked
@@ -610,8 +806,8 @@ public class Dashboard extends javax.swing.JFrame {
     private void jButtonUserSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonUserSearchMouseClicked
         // TODO add your handling code here:
         DefaultListModel model = new DefaultListModel();
-        if (this.jTextFieldUserSearch.getText().contentEquals("")||
-                this.jTextFieldUserSearch.getText().contentEquals("Buscar usuarios")) {
+        if (this.jTextFieldUserSearch.getText().contentEquals("")
+                || this.jTextFieldUserSearch.getText().contentEquals("Buscar usuarios")) {
             List<User> userList = null;
             try {
                 userList = connection.getServer().getUserList();
@@ -621,8 +817,8 @@ public class Dashboard extends javax.swing.JFrame {
             }
             if (!userList.isEmpty()) {
                 for (int i = 0; i < userList.size(); i++) {
-                    model.addElement(userList.get(i).getUserName()+", "+userList.get(i).getUserEmail());
-                    
+                    model.addElement(userList.get(i).getUserName() + ", " + userList.get(i).getUserEmail());
+
                     //model.addElement(new ComboItem(userList.get(i).getUserName(),
                     //                                userList.get(i).getUserId()));
                 }
@@ -631,12 +827,34 @@ public class Dashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonUserSearchMouseClicked
 
+    private void IniciarChatButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IniciarChatButtonMouseClicked
+        try {
+            AbrirChat(evt);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_IniciarChatButtonMouseClicked
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        try {
+            if (connection.beginRegistry()) {
+                connection.getServer().meDesconecte(MiNombre);
+                System.out.println("Me desconecte");
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(SecondView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_formWindowClosing
+
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton IniciarChatButton;
+    private javax.swing.JList ListConectados;
+    private javax.swing.JLabel UsernameLabel;
+    private javax.swing.JLabel WarningLabel;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButtonRoleCreate;
@@ -671,6 +889,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTextField jTextFieldConfirmPassword;

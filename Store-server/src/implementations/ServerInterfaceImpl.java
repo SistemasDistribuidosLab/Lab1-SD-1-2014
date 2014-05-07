@@ -30,6 +30,9 @@ import jpacontrollers.exceptions.NonexistentEntityException;
  */
 public class ServerInterfaceImpl extends UnicastRemoteObject implements ServerInterface{
     private ArrayList clients = new ArrayList();
+    private ArrayList clientes = new ArrayList();
+    
+    
     /*  Persistencia    */
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("Store-serverPU");
     EntityManager em = emf.createEntityManager();
@@ -46,7 +49,23 @@ public class ServerInterfaceImpl extends UnicastRemoteObject implements ServerIn
     ItemJpaController itemJpaController = new ItemJpaController(emf);
     ProductJpaController productJpaController = new ProductJpaController(emf);
     
-
+public void enviarMensaje(String emisor, String receptor, String mensaje) throws RemoteException{
+        System.out.println(emisor + ": "+ mensaje);
+        ClientInterface Receptor = (ClientInterface) clients.get(clientes.indexOf(receptor));
+        Receptor.recibirMensaje(emisor, receptor, mensaje);
+    }
+    public void AbrirChat(String emisor, String receptor) throws RemoteException{
+        ClientInterface Receptor = (ClientInterface) clients.get(clientes.indexOf(receptor));
+        //Receptor.AbrirChat(emisor);
+        Receptor.AbreElChat(emisor);
+    }
+    
+    public void meDesconecte(String usuario) throws RemoteException{
+        System.out.println("Desconectando...");
+        int index = clientes.indexOf(usuario);
+        ClientInterface client = (ClientInterface) clients.get(index);
+        clientUnregistry(client, usuario);
+    }
 
     public ServerInterfaceImpl() throws RemoteException{
         super();
@@ -67,25 +86,39 @@ public class ServerInterfaceImpl extends UnicastRemoteObject implements ServerIn
     //Este método registra clientes que se conectan
     public synchronized void clientRegistry(ClientInterface client, String name) throws RemoteException{
         if (!(clients.contains(client))) {
+            clientes.add(name);
             clients.add(client);
             //clientesNombre.addElement(Nombre);
             for (int i=0;i<clients.size();i++){
                 ClientInterface nextClient = (ClientInterface)clients.get(i);
                 if (!client.toString().equals(nextClient.toString())){
                     //Mando la notificacion de que se conecto otro usuario
-                    nextClient.notify(name+" has connected");
+                    nextClient.notify(name);
+                }else{
+                    // si es el mismo, le notifico del nombre de todos los demas
+                    for(int j = 0; j < clientes.size(); j++){
+                        //System.out.println("Comparando " + clientes.get(j) + " != " + name);
+                        if(!clientes.get(j).equals(name)){
+                            //System.out.println("\tEnviando...");
+                            client.notify((String) clientes.get(j));
+                        }
+                    }
                 }
             }
         }
     }
+    
     //Este método elimina clientes y notifica la desconexion de alguno.
     public synchronized void clientUnregistry(ClientInterface client, String name) throws RemoteException{
-        if (clients.remove(client)) {
+        System.out.println("Eliminare...");
+        if (clients.remove(client) && clientes.remove(name)) {
             //clientesNombre.removeElement(Nombre);
+            System.out.println("Notificare...");
             for (int i=0;i<clients.size();i++){
+                System.out.println("Notificando a: "+i);
                 ClientInterface nextClient = (ClientInterface)clients.get(i);
                 //Mando la notificacion de que se conecto otro usuario
-                nextClient.notify(name+" has disconected.");
+                nextClient.seDesconecto(name);
             }
         }
         else{
