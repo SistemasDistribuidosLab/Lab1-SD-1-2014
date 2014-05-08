@@ -496,7 +496,7 @@ public List<Log> getLogList(User user) throws RemoteException {
     List<Log> logList = null;
     if (!logListAll.isEmpty()) {
         for (int i = 0; i < logListAll.size(); i++) {
-            if (logListAll.get(i).getIdLog()==user.getUserId()) {
+            if (logListAll.get(i).getUserId().getUserId()==user.getUserId()) {
                 logList.add(logListAll.get(i));
             }
         }
@@ -516,14 +516,12 @@ public Log findLog(Integer idLog) throws RemoteException {
             for (int i = 0; i < ips.size(); i++) {
                 System.out.println(ip + " == " + ips.get(i));
                 if(ip.equals(ips.get(i))){
-                    System.out.println("uuuuuuuuu");
                     return (User) getUserByEmail((String) clientes.get(i));
                 }
             }
         }catch(ServerNotActiveException e){
             e.printStackTrace();
         }
-        System.out.println("kkkkkkkkkkk");
         return null;
     }
 }
