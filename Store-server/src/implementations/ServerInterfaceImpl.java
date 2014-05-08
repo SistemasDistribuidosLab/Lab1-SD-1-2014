@@ -67,12 +67,12 @@ public class ServerInterfaceImpl extends UnicastRemoteObject implements ServerIn
         GenerarLog("SeDesconecto", getUserByIp());
     }
 
-    User getUserByEmail(String usuario){
-        int index = clientes.indexOf(usuario);        
+    public User getUserByEmail(String email) throws RemoteException {
+        int index = clientes.indexOf(email);        
         List<User> userList = userJpaController.findUserEntities();
         User user = null;
         for (int i = 0; i < userList.size(); i++) {
-            if (userList.get(i).getUserEmail().contentEquals(usuario)) {
+            if (userList.get(i).getUserEmail().contentEquals(email)) {
                 user = userList.get(i);
                 return user;
             }
@@ -81,7 +81,6 @@ public class ServerInterfaceImpl extends UnicastRemoteObject implements ServerIn
     }
     
     public void GenerarLog(String evento, User user) {
-        System.out.println("eeeeeeeeeeeee");
         if (user != null) {
             Log log = new Log();
             log.setUserId(user);
@@ -95,7 +94,6 @@ public class ServerInterfaceImpl extends UnicastRemoteObject implements ServerIn
             logJpaController.create(log);
             System.out.println(evento + " | " + user.getUserEmail() + " | " + date + " | " + hora);
         }
-        System.out.println("ttttttttttttttttttt");
     }
 
     public ServerInterfaceImpl() throws RemoteException {
@@ -125,15 +123,14 @@ public class ServerInterfaceImpl extends UnicastRemoteObject implements ServerIn
         if (!(clients.contains(client))) {
             clientes.add(name);
             System.out.println("Buscando ip...");
-            try {
-                
+            try {                
                 System.out.println("La ip es: " + RemoteServer.getClientHost());
                 ips.add(RemoteServer.getClientHost());
                 System.out.println("Largo : " + ips.size());
+                
             } catch (ServerNotActiveException ex) {
                 Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.out.println("Cague u.u");
             clients.add(client);
             //clientesNombre.addElement(Nombre);
             for (int i = 0; i < clients.size(); i++) {
@@ -490,8 +487,22 @@ public void destroyLog(Log log) throws RemoteException, Exception {
 }
 
 public List<Log> getLogList() throws RemoteException {
-    GenerarLog("GetLogList", getUserByIp());
+    GenerarLog("GetLogList admin", getUserByIp());
     return logJpaController.findLogEntities();
+}
+
+public List<Log> getLogList(User user) throws RemoteException {
+    List<Log> logListAll = logJpaController.findLogEntities();
+    List<Log> logList = null;
+    if (!logListAll.isEmpty()) {
+        for (int i = 0; i < logListAll.size(); i++) {
+            if (logListAll.get(i).getIdLog()==user.getUserId()) {
+                logList.add(logListAll.get(i));
+            }
+        }
+    }
+    GenerarLog("GetLogList common", getUserByIp());
+    return logList;
 }
 
 public Log findLog(Integer idLog) throws RemoteException {
@@ -499,7 +510,7 @@ public Log findLog(Integer idLog) throws RemoteException {
     return logJpaController.findLog(idLog);
 }
 
-    private User getUserByIp(){
+    private User getUserByIp() throws RemoteException{
         try{
             String ip = RemoteServer.getClientHost();
             for (int i = 0; i < ips.size(); i++) {

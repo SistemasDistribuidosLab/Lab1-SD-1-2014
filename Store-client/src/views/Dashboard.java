@@ -28,15 +28,15 @@ public class Dashboard extends javax.swing.JFrame {
 
     ArrayList Conectados = new ArrayList();
     private ConnectionRMI connection = new ConnectionRMI();
-    private String MiNombre;
+    private String myEmail;
     ArrayList Chats = new ArrayList();
 
-    public Dashboard(ConnectionRMI conn, String MiNombre) {
+    public Dashboard(ConnectionRMI conn, String myEmail) {
         initComponents();
-        this.MiNombre = MiNombre;
+        this.myEmail = myEmail;
         this.WarningLabel.setVisible(false);
-        System.out.println("Mi nombre es: " + MiNombre);
-        UsernameLabel.setText("Bienvenido " + MiNombre);
+        System.out.println("Mi nombre es: " + myEmail);
+        UsernameLabel.setText("Bienvenido " + myEmail);
         ListConectados.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -76,7 +76,7 @@ public class Dashboard extends javax.swing.JFrame {
                 //a.activarTextArea(true);
                 if (connection.beginRegistry()) {
                     //System.out.println("enviarMensaje( " + MiNombre + ", "+ nombre_receptor + ", Hola Mundo 2 !!!" );
-                    connection.getServer().enviarMensaje(MiNombre, nombre, "");
+                    connection.getServer().enviarMensaje(myEmail, nombre, "");
                 }
             }
         }
@@ -98,7 +98,7 @@ public class Dashboard extends javax.swing.JFrame {
                 }
             }
             if (!existeChat) {
-                Chat = new Chat(MiNombre, ListConectados.getSelectedValue().toString(), true);
+                Chat = new Chat(myEmail, ListConectados.getSelectedValue().toString(), true);
                 int centro_x_padre = this.getLocation().x + this.getWidth() / 2;
                 int centro_y_padre = this.getLocation().y + this.getHeight() / 2;
                 Chat.setLocation(centro_x_padre, centro_y_padre);
@@ -242,6 +242,10 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
+        jPanel14 = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jListLog = new javax.swing.JList();
+        jButtonLogUpdate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -832,6 +836,38 @@ public class Dashboard extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Clientes", jPanel6);
 
+        jScrollPane6.setViewportView(jListLog);
+
+        jButtonLogUpdate.setText("Actualizar log");
+        jButtonLogUpdate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonLogUpdateMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
+        jPanel14.setLayout(jPanel14Layout);
+        jPanel14Layout.setHorizontalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jButtonLogUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
+                .addGap(87, 87, 87))
+        );
+        jPanel14Layout.setVerticalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonLogUpdate)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(177, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Log", jPanel14);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -1036,7 +1072,7 @@ public class Dashboard extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
             if (connection.beginRegistry()) {
-                connection.getServer().meDesconecte(MiNombre);
+                connection.getServer().meDesconecte(myEmail);
                 System.out.println("Me desconecte");
             }
         } catch (RemoteException ex) {
@@ -1132,15 +1168,56 @@ public class Dashboard extends javax.swing.JFrame {
 
                     //model.addElement(new ComboItem(userList.get(i).getUserName(),
                         //                                userList.get(i).getUserId()));
+                }
+                this.jListCompanyList.setModel(model);
             }
-            this.jListCompanyList.setModel(model);
-        }
         }
     }//GEN-LAST:event_jButtonCompanySearchMouseClicked
 
     private void jButtonCompanySearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCompanySearchActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonCompanySearchActionPerformed
+
+    private void jButtonLogUpdateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLogUpdateMouseClicked
+        DefaultListModel model = new DefaultListModel();
+        List<Log> logList = null;
+        User user = null;
+        try {
+            user = connection.getServer().getUserByEmail(myEmail);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //Si el usuario no es superadmin
+        if ((user!=null)&&(user.getUserId()>1)) {
+            try {
+                logList = connection.getServer().getLogList(user);
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+                //Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        //Si el usuario es SuperAdmin, se le pasan todos los log
+        else if ((user!=null)&&(user.getUserId()==1)){
+            try {
+                logList = connection.getServer().getLogList();
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+                //Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        if (!logList.isEmpty()) {             
+            for (int i = 0; i < logList.size(); i++) {
+                model.addElement(logList.get(i).getUserId()+"-"+
+                                    logList.get(i).getIpUserLog()+" : "+
+                                    logList.get(i).getActionLog()+", "+
+                                    logList.get(i).getTimeLog()+" "+
+                                    logList.get(i).getDateLog());
+            }
+            this.jListLog.setModel(model);
+        }
+        
+    }//GEN-LAST:event_jButtonLogUpdateMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1155,6 +1232,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButtonCompanyCreate;
     private javax.swing.JButton jButtonCompanySearch;
+    private javax.swing.JButton jButtonLogUpdate;
     private javax.swing.JButton jButtonRoleCreate;
     private javax.swing.JButton jButtonRoleSearch;
     private javax.swing.JButton jButtonUserCreate;
@@ -1184,6 +1262,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelUserPasswordConsistency;
     private javax.swing.JLabel jLabelUserSuccessCreate;
     private javax.swing.JList jListCompanyList;
+    private javax.swing.JList jListLog;
     private javax.swing.JList jListRoleList1;
     private javax.swing.JList jListUserList;
     private javax.swing.JPanel jPanel1;
@@ -1191,6 +1270,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1203,6 +1283,7 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTabbedPane jTabbedPane3;

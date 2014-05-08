@@ -36,7 +36,8 @@ public interface ServerInterface extends Remote{
     public void editUser(User user) throws RemoteException, Exception;
     public void destroyUser(User user) throws RemoteException, Exception;
     public List<User> getUserList() throws RemoteException;
-    public User findUser(Integer idUser) throws RemoteException; 
+    public User findUser(Integer idUser) throws RemoteException;
+    public User getUserByEmail(String email) throws RemoteException; 
     
      /*  Métodos correspondientes al CRUD de Address*/
     public void createAddress(Address address) throws RemoteException;    
@@ -106,6 +107,7 @@ public interface ServerInterface extends Remote{
     public void editLog(Log log)  throws RemoteException, Exception;
     public void destroyLog(Log log) throws RemoteException, Exception;
     public List<Log> getLogList()throws RemoteException;
+    public List<Log> getLogList(User user) throws RemoteException;
     public Log findLog(Integer idLog) throws RemoteException;
     
 }

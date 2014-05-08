@@ -112,7 +112,7 @@ public class MainView extends javax.swing.JFrame {
                     MyDashboardView.setVisible(true);
                 }
                 else{
-                    JOptionPane.showMessageDialog(this, "Nombre y/o Contraseña Inválida", "Mensaje", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Email y/o Contraseña Inválida", "Mensaje", JOptionPane.ERROR_MESSAGE);
                 }
             }
             else{

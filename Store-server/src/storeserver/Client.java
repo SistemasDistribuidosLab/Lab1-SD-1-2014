@@ -15,7 +15,16 @@ import interfaces.ClientInterface;
 public class Client implements Runnable {
 
     private String clientName;
+    private String clientIp;
     private ClientInterface client;
+
+    public String getClientIp() {
+        return clientIp;
+    }
+
+    public void setClientIp(String clientIp) {
+        this.clientIp = clientIp;
+    }
 
     public String getClientName() {
         return clientName;
