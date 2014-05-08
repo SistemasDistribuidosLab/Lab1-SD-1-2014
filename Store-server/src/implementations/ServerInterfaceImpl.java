@@ -49,14 +49,22 @@ public class ServerInterfaceImpl extends UnicastRemoteObject implements ServerIn
         System.out.println(emisor + ": "+ mensaje);
         ClientInterface Receptor = (ClientInterface) clients.get(clientes.indexOf(receptor));
         Receptor.recibirMensaje(emisor, receptor, mensaje);
-        GenerarLog("EnvioMensaje", getUserByEmail(emisor));
+        try {
+            GenerarLog("EnvioMensaje", getUserByEmail(emisor));
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void AbrirChat(String emisor, String receptor) throws RemoteException {
         ClientInterface Receptor = (ClientInterface) clients.get(clientes.indexOf(receptor));
         //Receptor.AbrirChat(emisor);
         Receptor.AbreElChat(emisor);
-        GenerarLog("AbrioChat", getUserByEmail(emisor));
+        try {
+            GenerarLog("AbrioChat", getUserByEmail(emisor));
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void meDesconecte(String usuario) throws RemoteException {
@@ -64,7 +72,11 @@ public class ServerInterfaceImpl extends UnicastRemoteObject implements ServerIn
         int index = clientes.indexOf(usuario);
         ClientInterface client = (ClientInterface) clients.get(index);
         clientUnregistry(client, usuario);
-        GenerarLog("SeDesconecto", getUserByIp());
+        try {
+            GenerarLog("SeDesconecto", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public User getUserByEmail(String email) throws RemoteException {
@@ -80,7 +92,7 @@ public class ServerInterfaceImpl extends UnicastRemoteObject implements ServerIn
         return null;
     }
     
-    public void GenerarLog(String evento, User user) {
+    public void GenerarLog(String evento, User user) throws ServerNotActiveException {
         if (user != null) {
             Log log = new Log();
             log.setUserId(user);
@@ -91,6 +103,8 @@ public class ServerInterfaceImpl extends UnicastRemoteObject implements ServerIn
             
             String hora = new SimpleDateFormat("HH:mm:ss").format(new Date());
             log.setTimeLog(new Date());
+            String ip = RemoteServer.getClientHost();
+            log.setIpUserLog(ip);
             logJpaController.create(log);
             System.out.println(evento + " | " + user.getUserEmail() + " | " + date + " | " + hora);
         }
@@ -108,7 +122,11 @@ public class ServerInterfaceImpl extends UnicastRemoteObject implements ServerIn
             for (int i = 0; i < userList.size(); i++) {
                 if (userList.get(i).getUserEmail().contentEquals(email)) {
                     if (userList.get(i).getUserPassword().contentEquals(pass)) {
-                        GenerarLog("InicioSesion", getUserByIp());
+                        try {
+                            GenerarLog("InicioSesion", getUserByIp());
+                        } catch (ServerNotActiveException ex) {
+                            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                         return true;
                     }
                 }
@@ -177,7 +195,11 @@ public class ServerInterfaceImpl extends UnicastRemoteObject implements ServerIn
     /*  Métodos correspondientes al CRUD de ROLE*/
     public void createRole(Role role) throws RemoteException {
         roleJpaController.create(role); //persist the entity                   
-        GenerarLog("CreateRole", getUserByIp());
+        try {
+            GenerarLog("CreateRole", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         
     }
@@ -193,26 +215,42 @@ GenerarLog("DestroyRole", getUserByIp());
 }
 
 public List<Role> getRoleList() throws RemoteException {
-GenerarLog("Role", getUserByIp());
+        try {
+            GenerarLog("Role", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
 return roleJpaController.findRoleEntities();
 }
 
 public Role findRole(Integer idRole) throws RemoteException {
-    GenerarLog("FindRole", getUserByIp());
+        try {
+            GenerarLog("FindRole", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
 return roleJpaController.findRole(idRole);
 }
 
     /*  Métodos correspondientes al CRUD de USER*/
     public void createUser(User user, Role role) throws RemoteException {
         user.setRoleId(role);
-        GenerarLog("CreateUser", getUserByIp());
+        try {
+            GenerarLog("CreateUser", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         userJpaController.create(user); //persist the entity                   
     }
 
     public void createUser(User user, Company company, Role role) throws RemoteException {
         user.setCompanyId(company);
         user.setRoleId(role);
-        GenerarLog("CreateUser", getUserByIp());
+        try {
+            GenerarLog("CreateUser", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         userJpaController.create(user); //persist the entity                   
     }
 
@@ -227,18 +265,30 @@ return roleJpaController.findRole(idRole);
     }
 
     public List<User> getUserList() throws RemoteException {
-        GenerarLog("getUserList", getUserByIp());
+        try {
+            GenerarLog("getUserList", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return userJpaController.findUserEntities();
     }
 
     public User findUser(Integer idUser) throws RemoteException {
-        GenerarLog("FindUser", getUserByIp());
+        try {
+            GenerarLog("FindUser", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return userJpaController.findUser(idUser);
     }
 
     /*Metodos correspondientes al CRUD de Address */
     public void createAddress(Address address) throws RemoteException {
-        GenerarLog("CreateAddress", getUserByIp());
+        try {
+            GenerarLog("CreateAddress", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         addressJpaController.create(address);
     }
 
@@ -253,18 +303,30 @@ return roleJpaController.findRole(idRole);
     }
 
     public List<Address> getAddressList() throws RemoteException {
-        GenerarLog("GetAddressList", getUserByIp());
+        try {
+            GenerarLog("GetAddressList", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return addressJpaController.findAddressEntities();
     }
 
     public Address findAddress(Integer idAddress) throws RemoteException {
-        GenerarLog("FindAddress", getUserByIp());
+        try {
+            GenerarLog("FindAddress", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return addressJpaController.findAddress(idAddress);
     }
 
     /*Metodos correspondientes al CRUD de Catalog */
     public void createCatalog(Catalog catalog) throws RemoteException {
-        GenerarLog("CreateCatalog", getUserByIp());
+        try {
+            GenerarLog("CreateCatalog", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         catalogJpaController.create(catalog);
     }
 
@@ -279,18 +341,30 @@ return roleJpaController.findRole(idRole);
     }
 
     public List<Catalog> getCatalogList() throws RemoteException {
-        GenerarLog("GetCatalogList", getUserByIp());
+        try {
+            GenerarLog("GetCatalogList", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return catalogJpaController.findCatalogEntities();
     }
 
     public Catalog findCatalog(Integer idCatalog) throws RemoteException {
-        GenerarLog("FindCatalog", getUserByIp());
+        try {
+            GenerarLog("FindCatalog", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return catalogJpaController.findCatalog(idCatalog);
     }
 
     /*Metodos correspondientes al CRUD de Category */
     public void createCategory(Category category) throws RemoteException {
-        GenerarLog("CreateCategory", getUserByIp());
+        try {
+            GenerarLog("CreateCategory", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         categoryJpaController.create(category);
     }
 
@@ -305,18 +379,30 @@ return roleJpaController.findRole(idRole);
     }
 
     public List<Category> getCategoryList() throws RemoteException {
-    GenerarLog("GetCategoryList", getUserByIp());
+        try {
+            GenerarLog("GetCategoryList", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     return categoryJpaController.findCategoryEntities();
 }
 
 public Category findCategory(Integer idCategory) throws RemoteException {
-    GenerarLog("FindCategory", getUserByIp());
+        try {
+            GenerarLog("FindCategory", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     return categoryJpaController.findCategory(idCategory);
 }
 
 /*Metodos correspondientes al CRUD de City */
 public void createCity(City city) throws RemoteException {
-    GenerarLog("CreateCity", getUserByIp());
+        try {
+            GenerarLog("CreateCity", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     cityJpaController.create(city);
 }
 
@@ -331,18 +417,30 @@ public void destroyCity(City city) throws RemoteException, Exception {
 }
 
 public List<City> getCityList() throws RemoteException {
-    GenerarLog("GetCityList", getUserByIp());
+        try {
+            GenerarLog("GetCityList", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     return cityJpaController.findCityEntities();
 }
 
 public City findCity(Integer idCity) throws RemoteException {
-    GenerarLog("FindCity", getUserByIp());
+        try {
+            GenerarLog("FindCity", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     return cityJpaController.findCity(idCity);
 }
 
 /*Metodos correspondientes al CRUD de Client */
 public void createClient(Client client) throws RemoteException {
-    GenerarLog("CreateClient", getUserByIp());
+        try {
+            GenerarLog("CreateClient", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     clientJpaController.create(client);
 }
 
@@ -357,18 +455,30 @@ public void destroyClient(Client client) throws RemoteException, Exception {
 }
 
 public List<Client> getClientList() throws RemoteException {
-    GenerarLog("GetClientList", getUserByIp());
+        try {
+            GenerarLog("GetClientList", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     return clientJpaController.findClientEntities();
 }
 
 public Client findClient(Integer idClient) throws RemoteException {
-    GenerarLog("FindClient", getUserByIp());
+        try {
+            GenerarLog("FindClient", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     return clientJpaController.findClient(idClient);
 }
 
 /*Metodos correspondientes al CRUD de Company */
 public void createCompany(Company company) throws RemoteException {
-    GenerarLog("CreateCompany", getUserByIp());
+        try {
+            GenerarLog("CreateCompany", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     companyJpaController.create(company);
 }
 
@@ -383,18 +493,30 @@ public void destroyCompany(Company company) throws RemoteException, Exception {
 }
 
 public List<Company> getCompanyList() throws RemoteException {
-    GenerarLog("GetCompanyList", getUserByIp());
+        try {
+            GenerarLog("GetCompanyList", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     return companyJpaController.findCompanyEntities();
 }
 
 public Company findCompany(Integer idCompany) throws RemoteException {
-    GenerarLog("FindCompany", getUserByIp());
+        try {
+            GenerarLog("FindCompany", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     return companyJpaController.findCompany(idCompany);
 }
 
 /*Metodos correspondientes al CRUD de Country */
 public void createCountry(Country country) throws RemoteException {
-    GenerarLog("CreateCountry", getUserByIp());
+        try {
+            GenerarLog("CreateCountry", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     countryJpaController.create(country);
 }
 
@@ -409,18 +531,30 @@ public void destroyCountry(Country country) throws RemoteException, Exception {
 }
 
 public List<Country> getCountryList() throws RemoteException {
-    GenerarLog("GetCountryList", getUserByIp());
+        try {
+            GenerarLog("GetCountryList", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     return countryJpaController.findCountryEntities();
 }
 
 public Country findCountry(Integer idCountry) throws RemoteException {
-    GenerarLog("FindCountry", getUserByIp());
+        try {
+            GenerarLog("FindCountry", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     return countryJpaController.findCountry(idCountry);
 }
 
 /*Metodos correspondientes al CRUD de Item */
 public void createItem(Item item) throws RemoteException {
-    GenerarLog("CreateItem", getUserByIp());
+        try {
+            GenerarLog("CreateItem", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     itemJpaController.create(item);
 }
 
@@ -435,18 +569,30 @@ public void destroyItem(Item item) throws RemoteException, Exception {
 }
 
 public List<Item> getItemList() throws RemoteException {
-    GenerarLog("GetItemList", getUserByIp());
+        try {
+            GenerarLog("GetItemList", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     return itemJpaController.findItemEntities();
 }
 
 public Item findItem(Integer idItem) throws RemoteException {
-    GenerarLog("FindItem", getUserByIp());
+        try {
+            GenerarLog("FindItem", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     return itemJpaController.findItem(idItem);
 }
 
 /*Metodos correspondientes al CRUD de Product */
 public void createProduct(Product product) throws RemoteException {
-    GenerarLog("CreateProduct", getUserByIp());
+        try {
+            GenerarLog("CreateProduct", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     productJpaController.create(product);
 }
 
@@ -461,18 +607,30 @@ public void destroyProduct(Product product) throws RemoteException, Exception {
 }
 
 public List<Product> getProductList() throws RemoteException {
-    GenerarLog("GetProductList", getUserByIp());
+        try {
+            GenerarLog("GetProductList", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     return productJpaController.findProductEntities();
 }
 
 public Product findProduct(Integer idProduct) throws RemoteException {
-    GenerarLog("FindProduct", getUserByIp());
+        try {
+            GenerarLog("FindProduct", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     return productJpaController.findProduct(idProduct);
 }
 
 /*Metodos correspondientes al CRUD de Product */
 public void createLog(Log log) throws RemoteException {
-    GenerarLog("CreateLog", getUserByIp());
+        try {
+            GenerarLog("CreateLog", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     logJpaController.create(log);
 }
 
@@ -487,7 +645,11 @@ public void destroyLog(Log log) throws RemoteException, Exception {
 }
 
 public List<Log> getLogList() throws RemoteException {
-    GenerarLog("GetLogList admin", getUserByIp());
+        try {
+            GenerarLog("GetLogList admin", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     return logJpaController.findLogEntities();
 }
 
@@ -501,16 +663,24 @@ public List<Log> getLogList(User user) throws RemoteException {
             }
         }
     }
-    GenerarLog("GetLogList common", getUserByIp());
+        try {
+            GenerarLog("GetLogList common", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     return logList;
 }
 
 public Log findLog(Integer idLog) throws RemoteException {
-    GenerarLog("FindLog", getUserByIp());
+        try {
+            GenerarLog("FindLog", getUserByIp());
+        } catch (ServerNotActiveException ex) {
+            Logger.getLogger(ServerInterfaceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     return logJpaController.findLog(idLog);
 }
 
-    private User getUserByIp() throws RemoteException{
+    private User getUserByIp(){
         try{
             String ip = RemoteServer.getClientHost();
             for (int i = 0; i < ips.size(); i++) {
@@ -521,6 +691,8 @@ public Log findLog(Integer idLog) throws RemoteException {
             }
         }catch(ServerNotActiveException e){
             e.printStackTrace();
+        }catch(RemoteException a){
+            
         }
         return null;
     }
