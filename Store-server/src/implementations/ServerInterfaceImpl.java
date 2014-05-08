@@ -1,17 +1,7 @@
 
 package implementations;
 
-import entities.Address;
-import entities.Catalog;
-import entities.Category;
-import entities.City;
-import entities.Client;
-import entities.Company;
-import entities.Country;
-import entities.Item;
-import entities.Product;
-import entities.Role;
-import entities.User;
+import entities.*;
 import interfaces.*;
 import java.rmi.RemoteException;
 import java.rmi.server.*;
@@ -48,6 +38,7 @@ public class ServerInterfaceImpl extends UnicastRemoteObject implements ServerIn
     CountryJpaController countryJpaController = new CountryJpaController(emf);
     ItemJpaController itemJpaController = new ItemJpaController(emf);
     ProductJpaController productJpaController = new ProductJpaController(emf);
+    LogJpaController logJpaController = new LogJpaController(emf);
     
 public void enviarMensaje(String emisor, String receptor, String mensaje) throws RemoteException{
         System.out.println(emisor + ": "+ mensaje);
@@ -363,5 +354,26 @@ public void enviarMensaje(String emisor, String receptor, String mensaje) throws
     
     public Product findProduct(Integer idProduct) throws RemoteException{
         return productJpaController.findProduct(idProduct);
+    }
+    
+    /*Metodos correspondientes al CRUD de Product */ 
+    public void createLog(Log log) throws RemoteException{
+        logJpaController.create(log);
+    }
+    
+    public void editLog(Log log)  throws RemoteException, Exception {
+        logJpaController.edit(log);
+    }
+    
+    public void destroyLog(Log log) throws RemoteException, Exception{
+        logJpaController.destroy(log.getIdLog());
+    }
+    
+    public List<Log> getLogList()throws RemoteException{
+        return logJpaController.findLogEntities();
+    }
+    
+    public Log findLog(Integer idLog) throws RemoteException{
+        return logJpaController.findLog(idLog);
     }
 }

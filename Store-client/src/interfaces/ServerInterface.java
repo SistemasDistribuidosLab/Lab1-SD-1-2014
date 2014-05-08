@@ -99,5 +99,12 @@ public interface ServerInterface extends Remote{
     public void destroyProduct(Product product)throws RemoteException, Exception;
     public List<Product> getProductList() throws RemoteException;
     public Product findProduct(Integer idProduct) throws RemoteException;    
-
+        
+        /*  Métodos correspondientes al CRUD de Log*/
+    public void createLog(Log log) throws RemoteException;
+    public void editLog(Log log)  throws RemoteException, Exception;
+    public void destroyLog(Log log) throws RemoteException, Exception;
+    public List<Log> getLogList()throws RemoteException;
+    public Log findLog(Integer idLog) throws RemoteException;
+    
 }

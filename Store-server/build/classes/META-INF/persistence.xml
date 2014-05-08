@@ -13,6 +13,7 @@
     <class>entities.Client</class>
     <class>entities.Item</class>
     <class>entities.Address</class>
+    <class>entities.Log</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/store"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

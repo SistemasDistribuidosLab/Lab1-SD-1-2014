@@ -17,6 +17,7 @@ import entities.Address;
 import java.util.ArrayList;
 import java.util.List;
 import entities.Client;
+import entities.Log;
 import entities.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -45,6 +46,9 @@ public class UserJpaController implements Serializable {
         if (user.getClientList() == null) {
             user.setClientList(new ArrayList<Client>());
         }
+        if (user.getLogList() == null) {
+            user.setLogList(new ArrayList<Log>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -71,6 +75,12 @@ public class UserJpaController implements Serializable {
                 attachedClientList.add(clientListClientToAttach);
             }
             user.setClientList(attachedClientList);
+            List<Log> attachedLogList = new ArrayList<Log>();
+            for (Log logListLogToAttach : user.getLogList()) {
+                logListLogToAttach = em.getReference(logListLogToAttach.getClass(), logListLogToAttach.getIdLog());
+                attachedLogList.add(logListLogToAttach);
+            }
+            user.setLogList(attachedLogList);
             em.persist(user);
             if (roleId != null) {
                 roleId.getUserList().add(user);
@@ -98,6 +108,15 @@ public class UserJpaController implements Serializable {
                     oldUserIdOfClientListClient = em.merge(oldUserIdOfClientListClient);
                 }
             }
+            for (Log logListLog : user.getLogList()) {
+                User oldUserIdOfLogListLog = logListLog.getUserId();
+                logListLog.setUserId(user);
+                logListLog = em.merge(logListLog);
+                if (oldUserIdOfLogListLog != null) {
+                    oldUserIdOfLogListLog.getLogList().remove(logListLog);
+                    oldUserIdOfLogListLog = em.merge(oldUserIdOfLogListLog);
+                }
+            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -120,6 +139,8 @@ public class UserJpaController implements Serializable {
             List<Address> addressListNew = user.getAddressList();
             List<Client> clientListOld = persistentUser.getClientList();
             List<Client> clientListNew = user.getClientList();
+            List<Log> logListOld = persistentUser.getLogList();
+            List<Log> logListNew = user.getLogList();
             List<String> illegalOrphanMessages = null;
             for (Client clientListOldClient : clientListOld) {
                 if (!clientListNew.contains(clientListOldClient)) {
@@ -154,6 +175,13 @@ public class UserJpaController implements Serializable {
             }
             clientListNew = attachedClientListNew;
             user.setClientList(clientListNew);
+            List<Log> attachedLogListNew = new ArrayList<Log>();
+            for (Log logListNewLogToAttach : logListNew) {
+                logListNewLogToAttach = em.getReference(logListNewLogToAttach.getClass(), logListNewLogToAttach.getIdLog());
+                attachedLogListNew.add(logListNewLogToAttach);
+            }
+            logListNew = attachedLogListNew;
+            user.setLogList(logListNew);
             user = em.merge(user);
             if (roleIdOld != null && !roleIdOld.equals(roleIdNew)) {
                 roleIdOld.getUserList().remove(user);
@@ -196,6 +224,23 @@ public class UserJpaController implements Serializable {
                     if (oldUserIdOfClientListNewClient != null && !oldUserIdOfClientListNewClient.equals(user)) {
                         oldUserIdOfClientListNewClient.getClientList().remove(clientListNewClient);
                         oldUserIdOfClientListNewClient = em.merge(oldUserIdOfClientListNewClient);
+                    }
+                }
+            }
+            for (Log logListOldLog : logListOld) {
+                if (!logListNew.contains(logListOldLog)) {
+                    logListOldLog.setUserId(null);
+                    logListOldLog = em.merge(logListOldLog);
+                }
+            }
+            for (Log logListNewLog : logListNew) {
+                if (!logListOld.contains(logListNewLog)) {
+                    User oldUserIdOfLogListNewLog = logListNewLog.getUserId();
+                    logListNewLog.setUserId(user);
+                    logListNewLog = em.merge(logListNewLog);
+                    if (oldUserIdOfLogListNewLog != null && !oldUserIdOfLogListNewLog.equals(user)) {
+                        oldUserIdOfLogListNewLog.getLogList().remove(logListNewLog);
+                        oldUserIdOfLogListNewLog = em.merge(oldUserIdOfLogListNewLog);
                     }
                 }
             }
@@ -254,6 +299,11 @@ public class UserJpaController implements Serializable {
                 addressListAddress.setUserId(null);
                 addressListAddress = em.merge(addressListAddress);
             }
+            List<Log> logList = user.getLogList();
+            for (Log logListLog : logList) {
+                logListLog.setUserId(null);
+                logListLog = em.merge(logListLog);
+            }
             em.remove(user);
             em.getTransaction().commit();
         } finally {
@@ -295,7 +345,7 @@ public class UserJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     public int getUserCount() {
         EntityManager em = getEntityManager();
         try {
