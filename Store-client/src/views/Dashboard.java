@@ -199,6 +199,11 @@ public class Dashboard extends javax.swing.JFrame {
         jLabelUserPasswordConsistency = new javax.swing.JLabel();
         jLabelUserSuccessCreate = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
+        jTextFieldRoleSearch = new javax.swing.JTextField();
+        jComboBoxRolerSearchType1 = new javax.swing.JComboBox();
+        jButtonRoleSearch = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jListRoleList1 = new javax.swing.JList();
         jPanel10 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
@@ -215,6 +220,24 @@ public class Dashboard extends javax.swing.JFrame {
         IniciarChatButton = new javax.swing.JButton();
         WarningLabel = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
+        jTabbedPane3 = new javax.swing.JTabbedPane();
+        jPanel12 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jTextFieldCompanyName = new javax.swing.JTextField();
+        jTextFieldCompanyDescription = new javax.swing.JTextField();
+        jTextFieldCompanyCode = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        jButtonCompanyCreate = new javax.swing.JButton();
+        jLabelCompanyMandatoryFields = new javax.swing.JLabel();
+        jLabelCompanySuccessCreate = new javax.swing.JLabel();
+        jPanel13 = new javax.swing.JPanel();
+        jTextFieldCompanySearch = new javax.swing.JTextField();
+        jComboBoxCompanySearchType = new javax.swing.JComboBox();
+        jButtonCompanySearch = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jListCompanyList = new javax.swing.JList();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -397,22 +420,56 @@ public class Dashboard extends javax.swing.JFrame {
                 .addComponent(jLabelUserPasswordConsistency)
                 .addGap(18, 18, 18)
                 .addComponent(jLabelUserSuccessCreate)
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(117, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Nuevo Usuario", jPanel9);
         jPanel9.getAccessibleContext().setAccessibleName("tabNewUser");
         jPanel9.getAccessibleContext().setAccessibleDescription("");
 
+        jTextFieldRoleSearch.setText("Listar Roles");
+
+        jButtonRoleSearch.setText("Buscar");
+        jButtonRoleSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonRoleSearchMouseClicked(evt);
+            }
+        });
+        jButtonRoleSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRoleSearchActionPerformed(evt);
+            }
+        });
+
+        jScrollPane3.setViewportView(jListRoleList1);
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 439, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane3)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jTextFieldRoleSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBoxRolerSearchType1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonRoleSearch)))
+                .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 386, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldRoleSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxRolerSearchType1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonRoleSearch))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(122, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Listar Roles", jPanel7);
@@ -507,7 +564,7 @@ public class Dashboard extends javax.swing.JFrame {
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 386, Short.MAX_VALUE)
+            .addGap(0, 389, Short.MAX_VALUE)
             .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel10Layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -569,15 +626,156 @@ public class Dashboard extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Usuarios", jPanel1);
 
+        jLabel8.setText("Nombre de la empresa*");
+
+        jLabel9.setText("Descripción");
+
+        jLabel11.setText("Código");
+
+        jTextFieldCompanyName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldCompanyNameActionPerformed(evt);
+            }
+        });
+
+        jLabel13.setText("(*) Campos obligatorios.");
+
+        jButtonCompanyCreate.setText("Registrar");
+        jButtonCompanyCreate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonCompanyCreateMouseClicked(evt);
+            }
+        });
+        jButtonCompanyCreate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCompanyCreateActionPerformed(evt);
+            }
+        });
+
+        jLabelCompanyMandatoryFields.setForeground(new java.awt.Color(255, 0, 0));
+        jLabelCompanyMandatoryFields.setText("Debe completar lo campos obligatorios");
+
+        jLabelCompanySuccessCreate.setForeground(new java.awt.Color(0, 153, 0));
+        jLabelCompanySuccessCreate.setText("E.mpresa creada con exito");
+
+        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addGap(77, 77, 77)
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelCompanyMandatoryFields)
+                    .addComponent(jLabelCompanySuccessCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel12Layout.createSequentialGroup()
+                            .addComponent(jLabel13)
+                            .addGap(123, 123, 123)
+                            .addComponent(jButtonCompanyCreate))
+                        .addGroup(jPanel12Layout.createSequentialGroup()
+                            .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel8)
+                                .addComponent(jLabel9)
+                                .addComponent(jLabel11))
+                            .addGap(38, 38, 38)
+                            .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jTextFieldCompanyName)
+                                .addComponent(jTextFieldCompanyDescription)
+                                .addComponent(jTextFieldCompanyCode, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(243, Short.MAX_VALUE))
+        );
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jTextFieldCompanyName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(jTextFieldCompanyDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(jTextFieldCompanyCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(jButtonCompanyCreate))
+                .addGap(18, 18, 18)
+                .addComponent(jLabelCompanyMandatoryFields)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabelCompanySuccessCreate)
+                .addContainerGap(164, Short.MAX_VALUE))
+        );
+
+        jTabbedPane3.addTab("Nueva Empresa", jPanel12);
+
+        jTextFieldCompanySearch.setText("Listar Proveedores");
+
+        jButtonCompanySearch.setText("Buscar");
+        jButtonCompanySearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonCompanySearchMouseClicked(evt);
+            }
+        });
+        jButtonCompanySearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCompanySearchActionPerformed(evt);
+            }
+        });
+
+        jScrollPane4.setViewportView(jListCompanyList);
+
+        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
+        jPanel13.setLayout(jPanel13Layout);
+        jPanel13Layout.setHorizontalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane4)
+                    .addGroup(jPanel13Layout.createSequentialGroup()
+                        .addComponent(jTextFieldCompanySearch, javax.swing.GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBoxCompanySearchType, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonCompanySearch)))
+                .addContainerGap())
+        );
+        jPanel13Layout.setVerticalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldCompanySearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxCompanySearchType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonCompanySearch))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(111, Short.MAX_VALUE))
+        );
+
+        jTabbedPane3.addTab("Listar Proveedores", jPanel13);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 649, Short.MAX_VALUE)
+            .addGap(0, 652, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addComponent(jTabbedPane3)
+                    .addContainerGap()))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 363, Short.MAX_VALUE)
+            .addGap(0, 417, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addComponent(jTabbedPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 11, Short.MAX_VALUE)))
         );
 
         jTabbedPane1.addTab("Proveedores", jPanel2);
@@ -590,7 +788,7 @@ public class Dashboard extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 363, Short.MAX_VALUE)
+            .addGap(0, 417, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Catálogos", jPanel3);
@@ -603,7 +801,7 @@ public class Dashboard extends javax.swing.JFrame {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 363, Short.MAX_VALUE)
+            .addGap(0, 417, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Categorías", jPanel4);
@@ -616,7 +814,7 @@ public class Dashboard extends javax.swing.JFrame {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 363, Short.MAX_VALUE)
+            .addGap(0, 417, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Productos", jPanel5);
@@ -629,7 +827,7 @@ public class Dashboard extends javax.swing.JFrame {
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 363, Short.MAX_VALUE)
+            .addGap(0, 417, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Clientes", jPanel6);
@@ -638,7 +836,7 @@ public class Dashboard extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 657, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -846,6 +1044,104 @@ public class Dashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formWindowClosing
 
+    private void jButtonRoleSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonRoleSearchMouseClicked
+        // TODO add your handling code here:
+        DefaultListModel model = new DefaultListModel();
+        if (this.jTextFieldRoleSearch.getText().contentEquals("")||
+            this.jTextFieldRoleSearch.getText().contentEquals("Buscar Roles")) {
+            List<Role> roleList = null;
+            try {
+                roleList = connection.getServer().getRoleList();
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+                //Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (!roleList.isEmpty()) {
+                for (int i = 0; i < roleList.size(); i++) {
+                    model.addElement(roleList.get(i).getRoleName()+", "+roleList.get(i).getRoleDescription());
+
+                }
+                this.jListRoleList1.setModel(model);
+            }
+        }
+    }//GEN-LAST:event_jButtonRoleSearchMouseClicked
+
+    private void jButtonRoleSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRoleSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonRoleSearchActionPerformed
+
+    private void jTextFieldCompanyNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCompanyNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldCompanyNameActionPerformed
+
+    private void jButtonCompanyCreateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCompanyCreateMouseClicked
+        // TODO add your handling code here:
+        String companyName = this.jTextFieldCompanyName.getText();
+        String companyDescription = this.jTextFieldCompanyDescription.getText();
+        String companyCode = this.jTextFieldCompanyCode.getText();
+        //Validación Mandatory Fields
+        Boolean companyCreable = true;
+        if (companyName.isEmpty()) {
+            this.jLabelCompanyMandatoryFields.setVisible(true);
+            companyCreable = false;
+        }
+        //Si el usuario es creable
+        if (companyCreable) {
+            this.jLabelCompanyMandatoryFields.setVisible(false);
+            this.jLabelCompanySuccessCreate.setVisible(false);
+            /*  Pre-Persistence */
+            Company company = new Company();
+            company.setCompanyName(companyName);
+            company.setCompanyDescription(companyDescription);
+            company.setCompanyCode(companyCode);
+            /*  Persistence */
+            try {
+                connection.getServer().createCompany(company);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                //Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            /*  Success Message */
+            this.jLabelCompanySuccessCreate.setVisible(true);
+            /*  Cleaning Fields */
+            this.jTextFieldCompanyName.setText("");
+            this.jTextFieldCompanyDescription.setText("");
+            this.jTextFieldCompanyCode.setText("");
+        }
+    }//GEN-LAST:event_jButtonCompanyCreateMouseClicked
+
+    private void jButtonCompanyCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCompanyCreateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonCompanyCreateActionPerformed
+
+    private void jButtonCompanySearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonCompanySearchMouseClicked
+        // TODO add your handling code here:
+        DefaultListModel model = new DefaultListModel();
+        if (this.jTextFieldCompanySearch.getText().contentEquals("")||
+            this.jTextFieldCompanySearch.getText().contentEquals("Listar Proveedores")) {
+            List<Company> companyList = null;
+            try {
+                companyList = connection.getServer().getCompanyList();
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+                //Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (!companyList.isEmpty()) {
+                for (int i = 0; i < companyList.size(); i++) {
+                    model.addElement(companyList.get(i).getCompanyName()+", "+companyList.get(i).getCompanyDescription()+", "+ companyList.get(i).getCompanyCode());
+
+                    //model.addElement(new ComboItem(userList.get(i).getUserName(),
+                        //                                userList.get(i).getUserId()));
+            }
+            this.jListCompanyList.setModel(model);
+        }
+        }
+    }//GEN-LAST:event_jButtonCompanySearchMouseClicked
+
+    private void jButtonCompanySearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCompanySearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonCompanySearchActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -857,29 +1153,44 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JLabel WarningLabel;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButtonCompanyCreate;
+    private javax.swing.JButton jButtonCompanySearch;
     private javax.swing.JButton jButtonRoleCreate;
+    private javax.swing.JButton jButtonRoleSearch;
     private javax.swing.JButton jButtonUserCreate;
     private javax.swing.JButton jButtonUserSearch;
+    private javax.swing.JComboBox jComboBoxCompanySearchType;
+    private javax.swing.JComboBox jComboBoxRolerSearchType1;
     private javax.swing.JComboBox jComboBoxUserRole;
     private javax.swing.JComboBox jComboBoxUserSearchType;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelCompanyMandatoryFields;
+    private javax.swing.JLabel jLabelCompanySuccessCreate;
     private javax.swing.JLabel jLabelRoleMandatoryFields;
     private javax.swing.JLabel jLabelRoleSuccessCreate;
     private javax.swing.JLabel jLabelUserMandatoryFields;
     private javax.swing.JLabel jLabelUserPasswordConsistency;
     private javax.swing.JLabel jLabelUserSuccessCreate;
+    private javax.swing.JList jListCompanyList;
+    private javax.swing.JList jListRoleList1;
     private javax.swing.JList jListUserList;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -890,12 +1201,20 @@ public class Dashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JTabbedPane jTabbedPane3;
+    private javax.swing.JTextField jTextFieldCompanyCode;
+    private javax.swing.JTextField jTextFieldCompanyDescription;
+    private javax.swing.JTextField jTextFieldCompanyName;
+    private javax.swing.JTextField jTextFieldCompanySearch;
     private javax.swing.JTextField jTextFieldConfirmPassword;
     private javax.swing.JTextField jTextFieldPassword;
     private javax.swing.JTextField jTextFieldRoleDescription;
     private javax.swing.JTextField jTextFieldRoleName;
+    private javax.swing.JTextField jTextFieldRoleSearch;
     private javax.swing.JTextField jTextFieldUserEmail;
     private javax.swing.JTextField jTextFieldUserName;
     private javax.swing.JTextField jTextFieldUserSearch;
