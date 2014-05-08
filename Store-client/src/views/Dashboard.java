@@ -1206,13 +1206,14 @@ public class Dashboard extends javax.swing.JFrame {
             }
         }
         
-        if (!logList.isEmpty()) {             
+        if (logList!=null) {             
             for (int i = 0; i < logList.size(); i++) {
-                model.addElement(logList.get(i).getUserId()+"-"+
+                model.addElement(logList.get(i).getUserId().getUserEmail()+"-"+
                                     logList.get(i).getIpUserLog()+" : "+
                                     logList.get(i).getActionLog()+", "+
                                     logList.get(i).getTimeLog()+" "+
                                     logList.get(i).getDateLog());
+
             }
             this.jListLog.setModel(model);
         }
