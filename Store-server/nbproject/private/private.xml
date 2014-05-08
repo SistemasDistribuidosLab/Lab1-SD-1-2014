@@ -5,9 +5,9 @@
         <group>
             <file>file:/home/sylar/proyectos/SD/SD-Lab1/Store-server/src/storeserver/ServerView.java</file>
             <file>file:/home/sylar/proyectos/SD/SD-Lab1/Store-server/src/interfaces/ServerInterface.java</file>
-            <file>file:/home/sylar/proyectos/SD/SD-Lab1/Store-server/src/META-INF/persistence.xml</file>
             <file>file:/home/sylar/proyectos/SD/SD-Lab1/Store-server/src/entities/Role.java</file>
             <file>file:/home/sylar/proyectos/SD/SD-Lab1/Store-server/src/entities/Address.java</file>
+            <file>file:/home/sylar/proyectos/SD/SD-Lab1/Store-server/src/jpacontrollers/RoleJpaController.java</file>
             <file>file:/home/sylar/proyectos/SD/SD-Lab1/Store-server/src/implementations/ServerInterfaceImpl.java</file>
         </group>
     </open-files>
